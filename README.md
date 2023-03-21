@@ -27,17 +27,16 @@
 
 | Config Enty | Description |
 | --- | --- |
-| `main-sound` | Sound which is supposed to be played when a button is pressed.<br>But as I am an idiot, i forgot to add this. |
-| `main-gui-name` | Name of the GUI. |
-| `main-gui-size` | The amount of slots in the GUI container. |
+| `sound` | Sound which is supposed to be played when a button is pressed.<br>But as I am an idiot, i forgot to add this. |
+| `gui-name` | Name of the GUI. |
+| `gui-size` | The amount of slots in the GUI container. |
 | `gui` | Slots defined. |
 
 | GUI Slot Variable | Description |
 | --- | --- |
 | `name` | Name of the slot's item. |
 | `item` | Item material. |
-| `lore1` | Lore line 1. |
-| `lore2` | Lore line 2. |
+| `lore` | Item lore. |
 | `interact` | Whether the item in this slot can be moved. |
 | `tag` | Used to identify the buttons. |
 
@@ -54,15 +53,15 @@ main-gui:
   '12':
     name: §dCombine
     item: ANVIL
-    lore1: §fLeft-Click to open the combination menu.
-    lore2: ''
+    lore:
+      - '§fLeft-Click to open the combination menu.'
     interact: false
     tag: COMBINE
   '14':
     name: §bSeparate
     item: GRINDSTONE
-    lore1: §fLeft-Click to open the separation menu.
-    lore2: ''
+    lore:
+      - '§fLeft-Click to open the separation menu.'
     interact: false
     tag: SEPARATE
 
@@ -78,17 +77,16 @@ then any undefined slots would default to the plugin's internal default config.
 | --- | --- |
 | `combine-success` | Message sent to the player when the item is combined. |
 | `combine-fail` | Message sent to the player when no elytra, or a combined elytra is used. |
-| `combine-sound` | Sound which is played when the item is combined. |
-| `combine-gui-name` | Name of the GUI. |
-| `combine-gui-size` | The amount of slots in the GUI container. |
-| `combine-gui` | Slots defined. |
+| `sound` | Sound which is played when the item is combined. |
+| `gui-name` | Name of the GUI. |
+| `gui-size` | The amount of slots in the GUI container. |
+| `gui` | Slots defined. |
 
 | GUI Slot Variable | Description |
 | --- | --- |
 | `name` | Name of the slot's item. |
 | `item` | Item material. |
-| `lore1` | Lore line 1. |
-| `lore2` | Lore line 2. |
+| `lore` | Item lore. |
 | `interact` | Whether the item in this slot can be moved. |
 | `tag` | Used to identify the buttons. |
 
@@ -105,36 +103,39 @@ combine-gui:
   '12':
     name: §e§lInfo
     item: IRON_CHESTPLATE
-    lore1: §fPlace your chestplate in the
-    lore2: §fempty slot underneath.
+    lore:
+      - '§fPlace your chestplate in the'
+      - '§fempty slot underneath.'
     interact: false
     tag: ''
   '14':
     name: §e§lInfo
     item: ELYTRA
-    lore1: §fPlace the elytra you wish
-    lore2: §fto merge with.
+    lore:
+      - '§fPlace the elytra you wish'
+      - '§fto merge with.'
     interact: false
     tag: ''
   '21':
     name: Slot 1
     item: AIR
-    lore1: ''
-    lore2: ''
+    lore:
+      - ''
     interact: true
     tag: PLAYER
   '23':
     name: Slot 2
     item: AIR
-    lore1: ''
-    lore2: ''
+    lore:
+      - ''
     interact: true
     tag: PLAYER
   '31':
     name: §a§lMerge
     item: LIME_STAINED_GLASS_PANE
-    lore1: §fClick here to
-    lore2: §fcombine the items.
+    lore:
+      - '§fClick here to'
+      - '§fcombine the items.'
     interact: false
     tag: CONFIRM
 
@@ -150,17 +151,16 @@ then any undefined slots would default to the plugin's internal default config.
 | --- | --- |
 | `separate-success` | Message sent to the player when the item is separated. |
 | `separate-fail` | Message sent to the player when no elytra, or a non-combined elytra is used. |
-| `separate-sound` | Sound which is played when the item is separated. |
-| `separate-gui-name` | Name of the GUI. |
-| `separate-gui-size` | The amount of slots in the GUI container. |
-| `separate-gui` | Slots defined. |
+| `sound` | Sound which is played when the item is separated. |
+| `gui-name` | Name of the GUI. |
+| `gui-size` | The amount of slots in the GUI container. |
+| `gui` | Slots defined. |
 
 | GUI Slot Variable | Description |
 | --- | --- |
 | `name` | Name of the slot's item. |
 | `item` | Item material. |
-| `lore1` | Lore line 1. |
-| `lore2` | Lore line 2. |
+| `lore` | Item lore. |
 | `interact` | Whether the item in this slot can be moved. |
 | `tag` | Used to identify the buttons. |
 
@@ -177,29 +177,31 @@ separate-gui:
   '12':
     name: §e§lInfo
     item: ELYTRA
-    lore1: §fPlace your elytra in the
-    lore2: §fempty slot to the right.
+    lore:
+      - '§fPlace your elytra in the'
+      - '§fempty slot to the right.'
     interact: false
     tag: ''
   '13':
     name: Slot 1
     item: AIR
-    lore1: ''
-    lore2: ''
+    lore:
+      - ''
     interact: true
     tag: PLAYER
   '22':
     name: §c§lSeperate
     item: RED_STAINED_GLASS_PANE
-    lore1: §fClick here to
-    lore2: §fseperate the items.
+    lore:
+      - '§fClick here to'
+      - '§fseperate the items.'
     interact: false
     tag: CONFIRM
   '31':
     name: Slot 2
     item: AIR
-    lore1: ''
-    lore2: ''
+    lore:
+      - ''
     interact: true
     tag: PLAYER
 
