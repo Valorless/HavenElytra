@@ -1,6 +1,7 @@
 package valorless.sakuraelytra;
 
-import valorless.valorlessutils.ValorlessUtils.*;
+import valorless.valorlessutils.config.Config;
+
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -8,6 +9,7 @@ public final class SakuraElytra extends JavaPlugin implements Listener {
 	public static JavaPlugin plugin;
 	//public static ItemMerge merger;
 	String Name = "§7[§dSakura§bElytra§7]§r";
+	public static Config config;
     
     public String[] commands = {
     		"sakuraelytra", "se"
@@ -15,41 +17,51 @@ public final class SakuraElytra extends JavaPlugin implements Listener {
 	
 	public void onLoad() {
 		plugin = this;
+		config = new Config(this, "config.yml");
+		
+		Lang.messages = new Config(this, "messages.yml");
+		
 		CommandListener.plugin = this;
+		
 		ItemMerge.plugin = this;
+		ItemMerge.config = new Config(this, "gui-combine.yml");
+		
 		ItemSplit.plugin = this;
+		ItemSplit.config = new Config(this, "gui-separate.yml");
+		
 		ItemGUI.plugin = this;
+		ItemGUI.config = new Config(this, "gui-main.yml");
 	}
 	
 	@Override
     public void onEnable() {		
-		Config.Load(plugin);
-		
 		//Config
-		Config.AddValidationEntry(plugin, "combine", true);
-		Config.AddValidationEntry(plugin, "separate", false);
+		config.AddValidationEntry("combine", true);
+		config.AddValidationEntry("separate", false);
 		
 		//Main GUI
-		Config.AddValidationEntry(plugin, "main-sound", "ENTITY_PLAYER_LEVELUP");
-		Config.AddValidationEntry(plugin, "main-gui-name", "&d&lSakyra Elytra");
-		Config.AddValidationEntry(plugin, "main-gui-size", 45);
-		Config.AddValidationEntry(plugin, "main-gui", "");
+		ItemGUI.config.AddValidationEntry("sound", "ENTITY_PLAYER_LEVELUP");
+		ItemGUI.config.AddValidationEntry("gui-name", "&d&lSakyra Elytra");
+		ItemGUI.config.AddValidationEntry("gui-size", 45);
+		ItemGUI.config.AddValidationEntry("gui", "");
 
 		//Combine
-		Config.AddValidationEntry(plugin, "combine-success", "%plugin% &dCombination success!");
-		Config.AddValidationEntry(plugin, "combine-fail", "%plugin% &dCombination failed!\nElytra missing, or is already combined.");
-		Config.AddValidationEntry(plugin, "combine-sound", "ENTITY_PLAYER_LEVELUP");
-		Config.AddValidationEntry(plugin, "combine-gui-name", "&d&lSakyra Elytra");
-		Config.AddValidationEntry(plugin, "combine-gui-size", 45);
-		Config.AddValidationEntry(plugin, "combine-gui", "");
+		ItemMerge.config.AddValidationEntry("sound", "ENTITY_PLAYER_LEVELUP");
+		ItemMerge.config.AddValidationEntry("gui-name", "&d&lSakyra Elytra");
+		ItemMerge.config.AddValidationEntry("gui-size", 45);
+		ItemMerge.config.AddValidationEntry("gui", "");
 
 		//Separate
-		Config.AddValidationEntry(plugin, "separate-success", "%plugin% &dSeparation success!");
-		Config.AddValidationEntry(plugin, "separate-fail", "%plugin% &dCombination failed!\nElytra missing, or is not combined.");
-		Config.AddValidationEntry(plugin, "separate-sound", "ENTITY_PLAYER_LEVELUP");
-		Config.AddValidationEntry(plugin, "separate-gui-name", "&d&lSakyra Elytra");
-		Config.AddValidationEntry(plugin, "separate-gui-size", 45);
-		Config.AddValidationEntry(plugin, "separate-gui", "");
+		ItemSplit.config.AddValidationEntry("sound", "ENTITY_PLAYER_LEVELUP");
+		ItemSplit.config.AddValidationEntry("gui-name", "&d&lSakyra Elytra");
+		ItemSplit.config.AddValidationEntry("gui-size", 45);
+		ItemSplit.config.AddValidationEntry("gui", "");
+		
+		//Lang
+		Lang.messages.AddValidationEntry("combine-success", "%plugin% &dCombination success!");
+		Lang.messages.AddValidationEntry("combine-fail", "%plugin% &dCombination failed!\nElytra missing, or is already combined.");
+		Lang.messages.AddValidationEntry("separate-success", "%plugin% &dSeparation success!");
+		Lang.messages.AddValidationEntry("separate-fail", "%plugin% &dCombination failed!\nElytra missing, or is not combined.");
 
 		CommandListener.onEnable();
 		

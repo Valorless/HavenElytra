@@ -29,18 +29,19 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import valorless.valorlessutils.ValorlessUtils.*;
+import valorless.valorlessutils.config.Config;
 
 public class ItemMergeSmithingTable implements Listener {
 	public static JavaPlugin plugin;
 	private final Inventory inv;
 	private List<Items> items;
 	private List<String> slotTags;
+	public static Config config;
 	
 	public class Items {
 		public String name = "";
 		public String item = "";
-		public String lore1 = "";
-		public String lore2 = "";
+		public List<String> lore = new ArrayList<String>();
 		public Boolean interactable = false;
 	}
 
@@ -48,7 +49,7 @@ public class ItemMergeSmithingTable implements Listener {
     	InitializeLists();
     	
         //inv = Bukkit.createInventory(null, Config.GetInt(plugin, "gui-size"), Config.GetString(plugin, "gui-name"));
-    	inv =  Bukkit.createInventory(null, InventoryType.SMITHING, Config.GetString(plugin, "gui-name"));
+    	inv =  Bukkit.createInventory(null, InventoryType.SMITHING, config.GetString("gui-name"));
 
         InitializeItems();
     }
@@ -56,16 +57,15 @@ public class ItemMergeSmithingTable implements Listener {
     public void InitializeLists() {
     	items = new ArrayList<Items>();
     	slotTags = new ArrayList<String>();
-    	for(int i = 0; i < Config.GetInt(plugin, "gui-size"); i++) {
+    	for(int i = 0; i < config.GetInt("gui-size"); i++) {
     		Items item = new Items();
-    		item.name = Config.GetString(plugin, "gui." + i + ".name");
-    		item.item = Config.GetString(plugin, "gui." + i + ".item");
-    		item.lore1 = Config.GetString(plugin, "gui." + i + ".lore1");
-    		item.lore2 = Config.GetString(plugin, "gui." + i + ".lore2");
-    		item.interactable = Config.GetBool(plugin, "gui." + i + ".interact");
+    		item.name = config.GetString("gui." + i + ".name");
+    		item.item = config.GetString("gui." + i + ".item");
+    		item.lore = config.GetStringList("gui." + i + ".lore");
+    		item.interactable = config.GetBool("gui." + i + ".interact");
         	items.add(item);
-        	if(Config.GetString(plugin, "gui." + i + ".tag") != null) {
-        		slotTags.add(Config.GetString(plugin, "gui." + i + ".tag"));
+        	if(config.GetString("gui." + i + ".tag") != null) {
+        		slotTags.add(config.GetString("gui." + i + ".tag"));
         	} else {
         		slotTags.add("null");
         	}

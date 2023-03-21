@@ -47,7 +47,11 @@ public class CommandListener implements Listener {
 			else 
 			if (args.length >= 2){
 				if(args[1].equalsIgnoreCase("reload") && sender.hasPermission("sakuraelytra.reload")) {
-					Config.Reload(plugin);
+					SakuraElytra.config.Reload();
+					ItemMerge.config.Reload();
+					ItemSplit.config.Reload();
+					ItemGUI.config.Reload();
+					Lang.messages.Reload();
 					sender.sendMessage(Name +" §aReloaded.");
 					if(!console) { Log.Info(plugin, Name + " §aReloaded!"); }
 				}

@@ -1,0 +1,39 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                      Main GUI                        | #
+# +------------------------------------------------------+ #
+############################################################
+
+sound: 'ENTITY_PLAYER_LEVELUP'
+# Sounds @ https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+
+# Name of the container.
+gui-name: '&d&lSakura Elytra'
+
+# Size for custom inventory must be a multiple of 9 between 9 and 54 slots
+# Essentially: 9 times how many rows. 9 = 1 row, 18 = 2 rows.
+gui-size: 45
+
+# Undefined slots will by default be black stained glass panes with blank names.
+# ### Tags ###
+# COMBINE - Marks this slot as a button to open the Combine menu.
+# SEPARATE - Marks this slot as a button to open the Separate menu.
+gui:
+  '0':
+    name: ''
+    item: ''
+    lore:
+      - ''
+    interact: false
+    tag: ''
+    
+# ## EXAMPLE ##
+# gui:
+#   '22':
+#     name: Merge
+#     item: LIME_STAINED_GLASS_PANE
+#     lore1: ''
+#     lore2: ''
+#     interact: false
+#     tag: CONFIRM
+  
