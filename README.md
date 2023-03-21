@@ -19,7 +19,7 @@
 
 ## Configuration
 | Config Entry | Description | Default | 
-| --- | :---: | :---: | :---: |
+| --- | :---: | :---: |
 | `combine` | Whether chestplates can be combined with elytras. | true |
 | `separate` | Whether elytras can be seperated back to chestplate and elytra. | true |
 
