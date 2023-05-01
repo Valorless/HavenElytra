@@ -1,18 +1,18 @@
-package valorless.sakuraelytra;
+package valorless.havenelytra;
 
 import valorless.valorlessutils.config.Config;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class SakuraElytra extends JavaPlugin implements Listener {
+public final class HavenElytra extends JavaPlugin implements Listener {
 	public static JavaPlugin plugin;
 	//public static ItemMerge merger;
-	String Name = "§7[§dSakura§bElytra§7]§r";
+	String Name = "§7[§aHaven§bElytra§7]§r";
 	public static Config config;
     
     public String[] commands = {
-    		"sakuraelytra", "se"
+    		"havenelytra", "he"
     };
 	
 	public void onLoad() {
@@ -41,27 +41,27 @@ public final class SakuraElytra extends JavaPlugin implements Listener {
 		
 		//Main GUI
 		ItemGUI.config.AddValidationEntry("sound", "ENTITY_PLAYER_LEVELUP");
-		ItemGUI.config.AddValidationEntry("gui-name", "&d&lSakyra Elytra");
+		ItemGUI.config.AddValidationEntry("gui-name", "&a&lHaven Elytra");
 		ItemGUI.config.AddValidationEntry("gui-size", 45);
 		ItemGUI.config.AddValidationEntry("gui", "");
 
 		//Combine
 		ItemMerge.config.AddValidationEntry("sound", "ENTITY_PLAYER_LEVELUP");
-		ItemMerge.config.AddValidationEntry("gui-name", "&d&lSakyra Elytra");
+		ItemMerge.config.AddValidationEntry("gui-name", "&a&lHaven Elytra");
 		ItemMerge.config.AddValidationEntry("gui-size", 45);
 		ItemMerge.config.AddValidationEntry("gui", "");
 
 		//Separate
 		ItemSplit.config.AddValidationEntry("sound", "ENTITY_PLAYER_LEVELUP");
-		ItemSplit.config.AddValidationEntry("gui-name", "&d&lSakyra Elytra");
+		ItemSplit.config.AddValidationEntry("gui-name", "&a&lHaven Elytra");
 		ItemSplit.config.AddValidationEntry("gui-size", 45);
 		ItemSplit.config.AddValidationEntry("gui", "");
 		
 		//Lang
-		Lang.messages.AddValidationEntry("combine-success", "%plugin% &dCombination success!");
-		Lang.messages.AddValidationEntry("combine-fail", "%plugin% &dCombination failed!\nElytra missing, or is already combined.");
-		Lang.messages.AddValidationEntry("separate-success", "%plugin% &dSeparation success!");
-		Lang.messages.AddValidationEntry("separate-fail", "%plugin% &dCombination failed!\nElytra missing, or is not combined.");
+		Lang.messages.AddValidationEntry("combine-success", "%plugin% &aCombination success!");
+		Lang.messages.AddValidationEntry("combine-fail", "%plugin% &cCombination failed!\nElytra missing, or is already combined.");
+		Lang.messages.AddValidationEntry("separate-success", "%plugin% &aSeparation success!");
+		Lang.messages.AddValidationEntry("separate-fail", "%plugin% &cCombination failed!\nElytra missing, or is not combined.");
 
 		CommandListener.onEnable();
 		

@@ -8,7 +8,7 @@ sound: 'ENTITY_PLAYER_LEVELUP'
 # Sounds @ https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
 
 # Name of the container.
-gui-name: '&d&lSakura Elytra'
+gui-name: '&a&lHaven Elytra'
 
 # Size for custom inventory must be a multiple of 9 between 9 and 54 slots
 # Essentially: 9 times how many rows. 9 = 1 row, 18 = 2 rows.

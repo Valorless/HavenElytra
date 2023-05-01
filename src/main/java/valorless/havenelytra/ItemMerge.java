@@ -1,4 +1,4 @@
-package valorless.sakuraelytra;
+package valorless.havenelytra;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.google.gson.Gson;
 
 import valorless.valorlessutils.ValorlessUtils.*;
 import valorless.valorlessutils.config.Config;
@@ -168,13 +170,22 @@ public class ItemMerge implements Listener {
         			Tags.Set(plugin, elytraMeta.getPersistentDataContainer(), "combined", 1, PersistentDataType.INTEGER);
         			Tags.Set(plugin, elytraMeta.getPersistentDataContainer(), "chestplate-type", chestplate.getType().toString(), PersistentDataType.STRING);
         			Tags.Set(plugin, elytraMeta.getPersistentDataContainer(), "chestplate-name", chestplateName, PersistentDataType.STRING);
+        			//String jsonLore = new Gson().toJson(chestplate.getItemMeta().getLore());
+        			//Tags.Set(plugin, elytraMeta.getPersistentDataContainer(), "lore", jsonLore, PersistentDataType.STRING);
 
         			Map<Enchantment, Integer> enchants = eMeta.getEnchants();
         			if(enchants.containsKey(Enchantment.MENDING)) {
         				Tags.Set(plugin, elytraMeta.getPersistentDataContainer(), "MENDING", enchants.get(Enchantment.MENDING), PersistentDataType.INTEGER);
+        				elytraMeta.removeEnchant(Enchantment.MENDING);
         			}
         			if(enchants.containsKey(Enchantment.DURABILITY)) {
         				Tags.Set(plugin, elytraMeta.getPersistentDataContainer(), "UNBREAKING", enchants.get(Enchantment.DURABILITY), PersistentDataType.INTEGER);
+        				elytraMeta.removeEnchant(Enchantment.DURABILITY);
+        			}
+        			
+        			Map <Enchantment, Integer> enc = chestplate.getItemMeta().getEnchants();
+        			for(Map.Entry<Enchantment, Integer> enchant : enc.entrySet()) {
+        				elytraMeta.addEnchant(enchant.getKey(), enchant.getValue(), true);
         			}
         			
         			elytra.setItemMeta(elytraMeta);

@@ -1,4 +1,4 @@
-package valorless.sakuraelytra;
+package valorless.havenelytra;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,8 +116,8 @@ public class ItemGUI implements Listener {
         if(tag == null) return;
         if(!Utils.IsStringNullOrEmpty(tag.toString())) {
         	//Log.Info(plugin, tag);
-        	if(tag.toString().equalsIgnoreCase("COMBINE") && SakuraElytra.config.GetBool("combine")) { Combine(); }
-        	if(tag.toString().equalsIgnoreCase("SEPARATE") && SakuraElytra.config.GetBool("separate")) { Separate(); }
+        	if(tag.toString().equalsIgnoreCase("COMBINE") && HavenElytra.config.GetBool("combine")) { Combine(); }
+        	if(tag.toString().equalsIgnoreCase("SEPARATE") && HavenElytra.config.GetBool("separate")) { Separate(); }
         }
         
 

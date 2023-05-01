@@ -1,4 +1,4 @@
-# SakuraElytra (Reworked)
+# HavenElytra
 ![Versions](https://img.shields.io/badge/Versions-1.18%20--%201.19%2B-brightgreen?style=flat)
 <a href="https://github.com/Valorless/ValorlessUtils" rel="nofollow"><img src="https://img.shields.io/badge/Requires-ValorlessUtils-red?style=flat" alt="Dependency" style="max-width: 100%;"/>
 <br>
@@ -6,16 +6,16 @@
 ## Commands
 | Command | Description |
 | --- | --- |
-| `/sakuraelytra` | Opens the main GUI menu. |
-| `/sakuraelytra reload` | Reloads config.yml |
+| `/havenelytra` | Opens the main GUI menu. |
+| `/havenelytra reload` | Reloads config.yml |
 
-*All commands can be shortened to /se*
+*All commands can be shortened to /he*
   
 ## Permissions
 | Permission | Description |
 | --- | --- |
-| `sakuraelytra.*` | Gives all SakuraElytra permissions. |
-| `sakuraelytra.reload` | Allows usage of /sakuraelytra reload. |
+| `havenelytra.*` | Gives all HavenElytra permissions. |
+| `havenelytra.reload` | Allows usage of /havenelytra reload. |
 
 ## Configuration
 | Config Entry | Description | Default | 

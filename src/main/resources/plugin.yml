@@ -1,38 +1,38 @@
-name: SakuraElytra
-main: valorless.sakuraelytra.SakuraElytra
+name: HavenElytra
+main: valorless.havenelytra.HavenElytra
 version: version-number
 author: Valorless
 depend: [ValorlessUtils]
 api-version: 1.18
 commands:
-  sakuraelytra:
+  havenelytra:
     description: Main command.
     usage:
-    aliases: se
-  sakuraelytra reload:
+    aliases: he
+  havenelytra reload:
     description: Reloads the configuration file.
-    usage: /sakuraelytra reload
-    permission: sakuraelytra.reload
-    permission-message: You don't have sakuraelytra.reload.
-    aliases: se reload
-  sakuraelytra combine:
-    description: Combine hats with helmets.
-    usage: /sakuraelytra combine
-    permission: sakuraelytra.combine
-    permission-message: You don't have sakuraelytra.combine.
-    aliases: se combine
-  sakuraelytra separate:
+    usage: /havenelytra reload
+    permission: havenelytra.reload
+    permission-message: You don't have havenelytra.reload.
+    aliases: he reload
+  havenelytra combine:
+    description: Combine elytras with chestplates.
+    usage: /havenelytra combine
+    permission: havenelytra.combine
+    permission-message: You don't have havenelytra.combine.
+    aliases: he combine
+  havenelytra separate:
     description: Separate chestplate from elytra.
-    usage: /sakuraelytra separate
-    permission: sakuraelytra.separate
-    permission-message: You don't have sakuraelytra.separate.
-    aliases: se separate
+    usage: /havenelytra separate
+    permission: havenelytra.separate
+    permission-message: You don't have havenelytra.separate.
+    aliases: he separate
 permissions:
-  sakuraelytra.*:
-    description: Gives access to all SakuraElytra commands.
+  havenelytra.*:
+    description: Gives access to all HavenElytra commands.
     children:
-      sakuraelytra.reload: true
-  sakuraelytra.reload:
+      havenelytra.reload: true
+  havenelytra.reload:
     description: Allows you to reload the configuration.
     default: op
   

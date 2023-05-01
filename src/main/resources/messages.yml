@@ -4,9 +4,9 @@
 # +------------------------------------------------------+ #
 ############################################################
 
-combine-success: '%plugin% &dCombination success!'
+combine-success: '%plugin% &aCombination success!'
 
-combine-fail: '%plugin% &dCombination failed!\nElytra missing, or is already combined.'
+combine-fail: '%plugin% &cCombination failed!\nElytra missing, or is already combined.'
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -14,6 +14,6 @@ combine-fail: '%plugin% &dCombination failed!\nElytra missing, or is already com
 # +------------------------------------------------------+ #
 ############################################################
 
-separate-success: '%plugin% &dSeparation success!'
+separate-success: '%plugin% &aSeparation success!'
 
-separate-fail: '%plugin% &dSeparation failed!\nElytra missing, or is not combined.'
+separate-fail: '%plugin% &cSeparation failed!\nElytra missing, or is not combined.'

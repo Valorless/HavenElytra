@@ -1,4 +1,4 @@
-package valorless.sakuraelytra;
+package valorless.havenelytra;
 
 import valorless.valorlessutils.config.Config;
 import valorless.valorlessutils.ValorlessUtils.Utils;
@@ -8,7 +8,7 @@ public class Lang {
 	public static Config messages;
 		
 	public static class Placeholders{
-		public static String plugin = "§7[§dSakura§bElytra§7]§r";
+		public static String plugin = "§7[§aHaven§bElytra§7]§r";
 	}
 	
 	public static String Parse(String text) {

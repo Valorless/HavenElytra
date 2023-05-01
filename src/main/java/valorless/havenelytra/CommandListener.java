@@ -1,4 +1,4 @@
-package valorless.sakuraelytra;
+package valorless.havenelytra;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -12,7 +12,7 @@ import valorless.valorlessutils.ValorlessUtils.*;
 
 public class CommandListener implements Listener {
 	public static JavaPlugin plugin;
-	String Name = "§7[§dSakura§bElytra§7]§r";
+	String Name = "§7[§aHaven§bElytra§7]§r";
 	
 	public static void onEnable() {
 	}
@@ -35,7 +35,7 @@ public class CommandListener implements Listener {
 	
 	public void ProcessCommand(String[] args, CommandSender sender, Boolean console) {
 		//for(int i = 0; i < args.length; i++) { Log.Severe(args[i]); }
-		if(args[0].equalsIgnoreCase("/sakuraelytra") || args[0].equalsIgnoreCase("/se")) {
+		if(args[0].equalsIgnoreCase("/havenelytra") || args[0].equalsIgnoreCase("/he")) {
 			
 			if(args.length == 1) {
 				//sender.sendMessage(Name + " SakuraElytra by Valorless.");
@@ -46,8 +46,8 @@ public class CommandListener implements Listener {
 			}
 			else 
 			if (args.length >= 2){
-				if(args[1].equalsIgnoreCase("reload") && sender.hasPermission("sakuraelytra.reload")) {
-					SakuraElytra.config.Reload();
+				if(args[1].equalsIgnoreCase("reload") && sender.hasPermission("havenelytra.reload")) {
+					HavenElytra.config.Reload();
 					ItemMerge.config.Reload();
 					ItemSplit.config.Reload();
 					ItemGUI.config.Reload();
