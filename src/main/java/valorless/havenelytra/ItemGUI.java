@@ -28,12 +28,14 @@ public class ItemGUI implements Listener {
 	public Player player;
 	private List<Items> items;
 	public static Config config;
+	public boolean filler;
 	
 	public class Items {
 		public String name = "";
 		public String item = "";
 		public List<String> lore = new ArrayList<String>();
 		public Boolean interactable = false;
+		public int customModelData;
 		public String tag;
 	}
 
@@ -41,7 +43,8 @@ public class ItemGUI implements Listener {
     	InitializeLists();
     	
         inv = Bukkit.createInventory(player, config.GetInt("gui-size"), Lang.Parse(config.GetString("gui-name")));
-
+        
+        filler = config.GetBool("use-filler");
         InitializeItems();
     }
     
@@ -53,6 +56,9 @@ public class ItemGUI implements Listener {
     		item.item = config.GetString("gui." + i + ".item");
     		item.lore = config.GetStringList("gui." + i + ".lore");
     		item.interactable = config.GetBool("gui." + i + ".interact");
+    		if(config.GetInt("gui." + i + ".custom-model-data") != null) {
+    			item.customModelData = config.GetInt("gui." + i + ".custom-model-data");
+    		}
     		item.tag = config.GetString("gui." + i + ".tag");
         	items.add(item);
     	}
@@ -61,14 +67,14 @@ public class ItemGUI implements Listener {
 	public void InitializeItems() {
     	for(int i = 0; i < items.size(); i++) {
     		if(!Utils.IsStringNullOrEmpty(items.get(i).item)) {
-    			inv.setItem(i, CreateGuiItem(Material.getMaterial(items.get(i).item), items.get(i).name, items.get(i).interactable, items.get(i).tag, items.get(i).lore));
-    		}else {
-    			inv.setItem(i, CreateGuiItem(Material.BLACK_STAINED_GLASS_PANE, "§f", false, null, null));
+    			inv.setItem(i, CreateGuiItem(Material.getMaterial(items.get(i).item), items.get(i).name, items.get(i).interactable, items.get(i).tag, items.get(i).lore, items.get(i).customModelData));
+    		} else if(filler == true) {
+    			inv.setItem(i, CreateGuiItem(Material.BLACK_STAINED_GLASS_PANE, "§f", false, "", null, 0));
     		}
     	}
     }
 
-    protected ItemStack CreateGuiItem(final Material material, final String name, boolean interact, final String tag, final List<String> lore) {
+    protected ItemStack CreateGuiItem(final Material material, final String name, boolean interact, final String tag, final List<String> lore, int customModelData) {
         ItemStack item = new ItemStack(material, 1);
         ItemMeta meta = item.getItemMeta();
         if(meta != null) {
@@ -82,6 +88,10 @@ public class ItemGUI implements Listener {
         	Tags.Set(plugin, meta.getPersistentDataContainer(), "tag", tag, PersistentDataType.STRING);
         	
         	meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        	
+        	if(customModelData != 0) {
+        		meta.setCustomModelData(customModelData);
+        	}
         	
         	item.setItemMeta(meta);
         }

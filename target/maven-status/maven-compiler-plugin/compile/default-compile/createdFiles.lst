@@ -1,6 +1,8 @@
 valorless\havenelytra\ItemGUI$Items.class
 valorless\havenelytra\ItemMergeSmithingTable.class
+valorless\havenelytra\GUI$Items.class
 valorless\havenelytra\Lang.class
+valorless\havenelytra\Menu.class
 valorless\havenelytra\ItemMerge.class
 valorless\havenelytra\ItemMerge$Items.class
 valorless\havenelytra\ItemSplit$Items.class
@@ -11,3 +13,4 @@ valorless\havenelytra\HavenElytra.class
 valorless\havenelytra\Lang$Placeholders.class
 valorless\havenelytra\CommandListener.class
 valorless\havenelytra\ItemSplit.class
+valorless\havenelytra\GUI.class

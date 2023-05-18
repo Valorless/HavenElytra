@@ -1,6 +1,6 @@
 name: HavenElytra
 main: valorless.havenelytra.HavenElytra
-version: 1.1.0.68
+version: 1.2.0.146
 author: Valorless
 depend: [ValorlessUtils]
 api-version: 1.18
@@ -15,18 +15,6 @@ commands:
     permission: havenelytra.reload
     permission-message: You don't have havenelytra.reload.
     aliases: he reload
-  havenelytra combine:
-    description: Combine elytras with chestplates.
-    usage: /havenelytra combine
-    permission: havenelytra.combine
-    permission-message: You don't have havenelytra.combine.
-    aliases: he combine
-  havenelytra separate:
-    description: Separate chestplate from elytra.
-    usage: /havenelytra separate
-    permission: havenelytra.separate
-    permission-message: You don't have havenelytra.separate.
-    aliases: he separate
 permissions:
   havenelytra.*:
     description: Gives access to all HavenElytra commands.

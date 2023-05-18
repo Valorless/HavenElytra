@@ -5,20 +5,23 @@
 ############################################################
 
 # Sound played when items combine.
-sound: 'ENTITY_PLAYER_LEVELUP'
+sound: 'BLOCK_ANVIL_USE'
 # Sounds @ https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
 
 # Name of the container.
-gui-name: '&a&lHaven Elytra'
+gui-name: '&aCombination'
 
-# Size for custom inventory must be a multiple of 9 between 9 and 54 slots
-# Essentially: 9 times how many rows. 9 = 1 row, 18 = 2 rows.
-gui-size: 45
+# none = AIR
+# default = BLACK_STAINED_GLASS_PANE
+# barrier = BARRIER (CustomModelData: 80000) - Used for custom textures with CustomModelData
+filler: 'default'
 
 # Undefined slots will by default be black stained glass panes with blank names.
 # ### Tags ###
 # PLAYER - Slot for the player's item. return these slots to the player upon closing inventory. !IMPORTANT only 2 of these, always chestplate first.
 # CONFIRM - Marks this slot as a button to confirm merging.
+# RESULT - Slot for the combined Elytra.
+# BACK - Marks this slot as a button to open the Main menu.
 gui:
   '0':
     name: ''
@@ -37,4 +40,5 @@ gui:
 #     lore2: ''
 #     interact: false
 #     tag: CONFIRM
+#     custom-model-data: 0
   

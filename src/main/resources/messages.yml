@@ -8,6 +8,8 @@ combine-success: '%plugin% &aCombination success!'
 
 combine-fail: '%plugin% &cCombination failed!\nElytra missing, or is already combined.'
 
+combine-disabled: '%plugin% &cCombination is disabled.'
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                      Separate                        | #
@@ -17,3 +19,5 @@ combine-fail: '%plugin% &cCombination failed!\nElytra missing, or is already com
 separate-success: '%plugin% &aSeparation success!'
 
 separate-fail: '%plugin% &cSeparation failed!\nElytra missing, or is not combined.'
+
+separate-disabled: '%plugin% &cSeparation is disabled.'

@@ -39,10 +39,12 @@ public class CommandListener implements Listener {
 			
 			if(args.length == 1) {
 				//sender.sendMessage(Name + " SakuraElytra by Valorless.");
-				ItemGUI gui = new ItemGUI();
+				//ItemGUI gui = new ItemGUI();
+				GUI gui = new GUI(Bukkit.getPlayer(sender.getName()));
 				Bukkit.getServer().getPluginManager().registerEvents(gui, plugin);
-				gui.player = Bukkit.getPlayer(sender.getName());
-				gui.OpenInventory(Bukkit.getPlayer(sender.getName()));
+				//gui.player = Bukkit.getPlayer(sender.getName());
+	        	//SFX.Play(ItemGUI.config.GetString("sound"), 1f, 1f, Bukkit.getPlayer(sender.getName()));
+				//gui.OpenInventory(Bukkit.getPlayer(sender.getName()));
 			}
 			else 
 			if (args.length >= 2){

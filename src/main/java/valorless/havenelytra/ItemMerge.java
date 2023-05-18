@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 
 import valorless.valorlessutils.ValorlessUtils.*;
 import valorless.valorlessutils.config.Config;
+import valorless.valorlessutils.json.JsonUtils;
 
 public class ItemMerge implements Listener {
 	public static JavaPlugin plugin;
@@ -37,19 +38,22 @@ public class ItemMerge implements Listener {
 	private List<Items> items;
 	private List<String> slotTags;
 	public static Config config;
+	public boolean filler;
 	
 	public class Items {
 		public String name = "";
 		public String item = "";
 		public List<String> lore = new ArrayList<String>();
 		public Boolean interactable = false;
+		public int customModelData = 0;
 	}
 
     public ItemMerge() {
     	InitializeLists();
     	
         inv = Bukkit.createInventory(player, config.GetInt("gui-size"), Lang.Parse(config.GetString("gui-name")));
-
+        
+        filler = config.GetBool("use-filler");
         InitializeItems();
     }
     
@@ -62,6 +66,9 @@ public class ItemMerge implements Listener {
     		item.item = config.GetString("gui." + i + ".item");
     		item.lore = config.GetStringList("gui." + i + ".lore");
     		item.interactable = config.GetBool("gui." + i + ".interact");
+    		if(config.GetInt("gui." + i + ".custom-model-data") != null) {
+    			item.customModelData = config.GetInt("gui." + i + ".custom-model-data");
+    		}
         	items.add(item);
         	if(config.GetString("gui." + i + ".tag") != null) {
         		slotTags.add(config.GetString("gui." + i + ".tag"));
@@ -74,14 +81,16 @@ public class ItemMerge implements Listener {
 	public void InitializeItems() {
     	for(int i = 0; i < items.size(); i++) {
     		if(!Utils.IsStringNullOrEmpty(items.get(i).item)) {
-    			inv.setItem(i, CreateGuiItem(Material.getMaterial(items.get(i).item), items.get(i).name, items.get(i).interactable, items.get(i).lore));
-    		}else {
-    			inv.setItem(i, CreateGuiItem(Material.BLACK_STAINED_GLASS_PANE, "§f", false, null));
+    			inv.setItem(i, CreateGuiItem(Material.getMaterial(items.get(i).item), items.get(i).name, items.get(i).interactable, items.get(i).lore, items.get(i).customModelData));
+    		} else if(filler == true) {
+    			inv.setItem(i, CreateGuiItem(Material.BLACK_STAINED_GLASS_PANE, "§f", false, null, 0));
+    		} else {
+    			inv.setItem(i, CreateGuiItem(Material.BARRIER, "§f", false, null, 80000));
     		}
     	}
     }
 
-    protected ItemStack CreateGuiItem(final Material material, final String name, boolean interact, final List<String> lore) {
+    protected ItemStack CreateGuiItem(final Material material, final String name, boolean interact, final List<String> lore, int customModelData) {
         ItemStack item = new ItemStack(material, 1);
         ItemMeta meta = item.getItemMeta();
         if(meta != null) {
@@ -94,6 +103,10 @@ public class ItemMerge implements Listener {
         	Tags.Set(plugin, meta.getPersistentDataContainer(), "interact", interact ? 1 : 0, PersistentDataType.INTEGER);
         	
         	meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        	
+        	if(customModelData != 0) {
+        		meta.setCustomModelData(customModelData);
+        	}
         	
         	item.setItemMeta(meta);
         }
@@ -135,16 +148,25 @@ public class ItemMerge implements Listener {
     public void Combine(final InventoryClickEvent e) {
     	List<Integer> slots = new ArrayList<Integer>();
         if(e.getRawSlot() <= slotTags.size()) {
+        	if(slotTags.get(e.getRawSlot()).equalsIgnoreCase("BACK")) {
+        		ReturnToMenu();
+        	}
+        	
         	if(slotTags.get(e.getRawSlot()).equalsIgnoreCase("CONFIRM")) {
         		for (int i = 0; i < e.getInventory().getSize(); i++) {
-        	    	if(slotTags.get(i).equalsIgnoreCase("PLAYER")) {
+        			if(slotTags.get(i).equalsIgnoreCase("PLAYER") || slotTags.get(i).equalsIgnoreCase("RESULT")) {
         	    		slots.add(i);
         	    	}
         	    }
         		ItemStack chestplate = e.getInventory().getItem(slots.get(0));
     			ItemStack elytra = e.getInventory().getItem(slots.get(1));
         		if(ValidateChestplate(chestplate) && ValidateElytra(elytra)) {
-        			
+
+        			ItemStack tempItem = new ItemStack(Material.ELYTRA);
+        			ItemMeta tempStorage = tempItem.getItemMeta();
+        			Tags.Set(plugin, tempStorage.getPersistentDataContainer(), "elytra-meta", JsonUtils.toJson(elytra.getItemMeta()), PersistentDataType.STRING);
+        			Tags.Set(plugin, tempStorage.getPersistentDataContainer(), "chestplate-meta", JsonUtils.toJson(chestplate.getItemMeta()), PersistentDataType.STRING);
+        			        			
         			ItemMeta eMeta = elytra.getItemMeta();
         			
         			String chestplateName;
@@ -155,25 +177,39 @@ public class ItemMerge implements Listener {
         			}
         			String elytraName = elytra.getItemMeta().getDisplayName();
     				List<String> lore = new ArrayList<String>();
-        			if(chestplate.getItemMeta().getLore() != null) { 
-        				lore = chestplate.getItemMeta().getLore();
+        			if(chestplate.getItemMeta().getLore() != null) {
+        				for(String str : chestplate.getItemMeta().getLore()) {
+        					lore.add(str);
+        				}
+        			}
+        			if(elytra.getItemMeta().getLore() != null) {
+        				lore.add("§r");
+        				for(String str : elytra.getItemMeta().getLore()) {
+        					lore.add(str);
+        				}
         			}
         			lore.add("§r");
-        			lore.add("§d+ " + chestplateName);
-        			elytra.setItemMeta(chestplate.getItemMeta());
-        			ItemMeta elytraMeta = elytra.getItemMeta();
-        			elytraMeta.setDisplayName(elytraName);
-        			elytraMeta.setLore(lore);
-        			elytraMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, GetModifier(chestplate, Attribute.GENERIC_ARMOR));
-        			elytraMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, GetModifier(chestplate, Attribute.GENERIC_ARMOR_TOUGHNESS));
-        			elytraMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, GetModifier(chestplate, Attribute.GENERIC_KNOCKBACK_RESISTANCE));
-        			Tags.Set(plugin, elytraMeta.getPersistentDataContainer(), "combined", 1, PersistentDataType.INTEGER);
-        			Tags.Set(plugin, elytraMeta.getPersistentDataContainer(), "chestplate-type", chestplate.getType().toString(), PersistentDataType.STRING);
-        			Tags.Set(plugin, elytraMeta.getPersistentDataContainer(), "chestplate-name", chestplateName, PersistentDataType.STRING);
+        			lore.add("§7+ [" + chestplateName + "§7]");
+        			//elytra.setItemMeta(Tags.Get(plugin, tempStorage.getPersistentDataContainer(), "chestplate-meta", PersistentDataType.STRING).toString());
+        			//elytra.setItemMeta(chestplate.getItemMeta());
+        			//ItemMeta elytraMeta = elytra.getItemMeta();
+        			ItemMeta chestMeta = chestplate.getItemMeta();
+        			chestMeta.setDisplayName(elytraName);
+        			chestMeta.setLore(lore);
+        			chestMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, GetModifier(chestplate, Attribute.GENERIC_ARMOR));
+        			chestMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, GetModifier(chestplate, Attribute.GENERIC_ARMOR_TOUGHNESS));
+        			chestMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, GetModifier(chestplate, Attribute.GENERIC_KNOCKBACK_RESISTANCE));
+        			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "combined", 1, PersistentDataType.INTEGER);
+        			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "chestplate-type", chestplate.getType().toString(), PersistentDataType.STRING);
+        			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "chestplate-name", chestplateName, PersistentDataType.STRING);
+        			
+        			if(elytra.getItemMeta().hasCustomModelData()) {
+        				chestMeta.setCustomModelData(elytra.getItemMeta().getCustomModelData());
+        			}
         			//String jsonLore = new Gson().toJson(chestplate.getItemMeta().getLore());
         			//Tags.Set(plugin, elytraMeta.getPersistentDataContainer(), "lore", jsonLore, PersistentDataType.STRING);
 
-        			Map<Enchantment, Integer> enchants = eMeta.getEnchants();
+        			/*Map<Enchantment, Integer> enchants = eMeta.getEnchants();
         			if(enchants.containsKey(Enchantment.MENDING)) {
         				Tags.Set(plugin, elytraMeta.getPersistentDataContainer(), "MENDING", enchants.get(Enchantment.MENDING), PersistentDataType.INTEGER);
         				elytraMeta.removeEnchant(Enchantment.MENDING);
@@ -181,15 +217,32 @@ public class ItemMerge implements Listener {
         			if(enchants.containsKey(Enchantment.DURABILITY)) {
         				Tags.Set(plugin, elytraMeta.getPersistentDataContainer(), "UNBREAKING", enchants.get(Enchantment.DURABILITY), PersistentDataType.INTEGER);
         				elytraMeta.removeEnchant(Enchantment.DURABILITY);
+        			}*/
+        			
+        			/*Map <Enchantment, Integer> enchants = eMeta.getEnchants ();
+        			for(Map.Entry<Enchantment, Integer> enchant : enchants.entrySet()) {
+        				elytraMeta.removeEnchant(enchant.getKey());
         			}
         			
         			Map <Enchantment, Integer> enc = chestplate.getItemMeta().getEnchants();
         			for(Map.Entry<Enchantment, Integer> enchant : enc.entrySet()) {
         				elytraMeta.addEnchant(enchant.getKey(), enchant.getValue(), true);
-        			}
+        			}*/
         			
-        			elytra.setItemMeta(elytraMeta);
+        			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "elytra-meta", 
+        					Tags.Get(plugin, tempStorage.getPersistentDataContainer(), "elytra-meta", PersistentDataType.STRING).toString()
+        					, PersistentDataType.STRING);
+        			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "chestplate-meta", 
+        					Tags.Get(plugin, tempStorage.getPersistentDataContainer(), "chestplate-meta", PersistentDataType.STRING).toString()
+        					, PersistentDataType.STRING);
+        			
+        			chestplate.setItemMeta(chestMeta);
+        			
+        			chestplate.setType(Material.ELYTRA);
+        			
         			e.getInventory().clear(slots.get(0));
+        			e.getInventory().clear(slots.get(1));
+        			e.getInventory().setItem(slots.get(2), chestplate);
         			player.sendMessage(Lang.Get("combine-success"));
         			SFX.Play(config.GetString("sound"), 1f, 1f, player);
         		}
@@ -326,5 +379,14 @@ public class ItemMerge implements Listener {
         	}
         }
     	//HandlerList.unregisterAll(this);
+    }
+    
+    public void ReturnToMenu() {
+    	//HandlerList.unregisterAll(this);
+    	player.closeInventory();
+    	ItemGUI menu = new ItemGUI();
+		Bukkit.getServer().getPluginManager().registerEvents(menu, plugin);
+		menu.player = player;
+		menu.OpenInventory(player);
     }
 }
