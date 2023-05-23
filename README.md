@@ -31,6 +31,7 @@
 | `gui-name` | Name of the GUI. |
 | `gui-size` | The amount of slots in the GUI container. |
 | `gui` | Slots defined. |
+| `filler` | |
 
 | GUI Slot Variable | Description |
 | --- | --- |
@@ -39,6 +40,7 @@
 | `lore` | Item lore. |
 | `interact` | Whether the item in this slot can be moved. |
 | `tag` | Used to identify the buttons. |
+| `custom-model-data` |  |
 
 | GUI Tags | Description |
 | --- | --- |
@@ -79,8 +81,8 @@ then any undefined slots would default to the plugin's internal default config.
 | `combine-fail` | Message sent to the player when no elytra, or a combined elytra is used. |
 | `sound` | Sound which is played when the item is combined. |
 | `gui-name` | Name of the GUI. |
-| `gui-size` | The amount of slots in the GUI container. |
 | `gui` | Slots defined. |
+| `filler` | |
 
 | GUI Slot Variable | Description |
 | --- | --- |
@@ -89,6 +91,7 @@ then any undefined slots would default to the plugin's internal default config.
 | `lore` | Item lore. |
 | `interact` | Whether the item in this slot can be moved. |
 | `tag` | Used to identify the buttons. |
+| `custom-model-data` |  |
 
 | GUI Tags | Description |
 | --- | --- |
@@ -153,8 +156,8 @@ then any undefined slots would default to the plugin's internal default config.
 | `separate-fail` | Message sent to the player when no elytra, or a non-combined elytra is used. |
 | `sound` | Sound which is played when the item is separated. |
 | `gui-name` | Name of the GUI. |
-| `gui-size` | The amount of slots in the GUI container. |
 | `gui` | Slots defined. |
+| `filler` | |
 
 | GUI Slot Variable | Description |
 | --- | --- |
@@ -163,6 +166,7 @@ then any undefined slots would default to the plugin's internal default config.
 | `lore` | Item lore. |
 | `interact` | Whether the item in this slot can be moved. |
 | `tag` | Used to identify the buttons. |
+| `custom-model-data` |  |
 
 | GUI Tags | Description |
 | --- | --- |
