@@ -1,5 +1,13 @@
 ############################################################
 # +------------------------------------------------------+ #
+# |                       General                        | #
+# +------------------------------------------------------+ #
+############################################################
+
+no-permission: '&cSorry, you do not have permission to do this.'
+
+############################################################
+# +------------------------------------------------------+ #
 # |                       Combine                        | #
 # +------------------------------------------------------+ #
 ############################################################
@@ -9,6 +17,13 @@ combine-success: '%plugin% &aCombination success!'
 combine-fail: '%plugin% &cCombination failed!\nElytra missing, or is already combined.'
 
 combine-disabled: '%plugin% &cCombination is disabled.'
+
+### NOTE: You cannot change %s. %s is used when formatting messages.
+# You may move %s around, but cannot rename it.
+
+# Text written in the item's lore to tell what item it's bound with.
+# %s - Name of the Chestplate. 
+combined-elytra-lore: '§7+ [%s§7]'
 
 ############################################################
 # +------------------------------------------------------+ #

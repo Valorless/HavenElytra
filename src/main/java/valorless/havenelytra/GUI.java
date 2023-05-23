@@ -103,12 +103,10 @@ public class GUI implements Listener {
     	for(int i = 0; i < items.size(); i++) {
     		if(!Utils.IsStringNullOrEmpty(items.get(i).item)) {
     			inv.setItem(i, CreateGuiItem(Material.getMaterial(items.get(i).item), items.get(i).name, items.get(i).interactable, items.get(i).tag, items.get(i).lore, items.get(i).customModelData));
-    		} else if(filler.equalsIgnoreCase("default")) {
-    			inv.setItem(i, CreateGuiItem(Material.BLACK_STAINED_GLASS_PANE, "§f", false, "", null, 0));
-    		} else if(filler.equalsIgnoreCase("barrier")){
+    		} else if(filler.equalsIgnoreCase("BARRIER")){
     			inv.setItem(i, CreateGuiItem(Material.BARRIER, "§f", false, "", null, 80000));
-    		} else if(filler.equalsIgnoreCase("none")){
-    			inv.setItem(i, CreateGuiItem(Material.AIR, "§f", false, "", null, 0));
+    		} else {
+    			inv.setItem(i, CreateGuiItem(Material.getMaterial(filler), "§f", false, "", null, 0));
     		}
     	}
     }
@@ -163,15 +161,23 @@ public class GUI implements Listener {
             if(!Utils.IsStringNullOrEmpty(tag.toString())) {
             	//Log.Info(plugin, tag);
             	if(tag.toString().equalsIgnoreCase("COMBINE")){
-            		if(HavenElytra.config.GetBool("combine")) { UpdateGUI(Menu.combine); return; }
-            		else { 
-            			player.sendMessage(Lang.Get("combine-disabled"));
+            		if(player.hasPermission("havenelytra.combine")) {
+            			if(HavenElytra.config.GetBool("combine")) { UpdateGUI(Menu.combine); return; }
+            			else { 
+            				player.sendMessage(Lang.Get("combine-disabled"));
+            			}
+            		}else {
+            			player.sendMessage(Lang.Get("no-permission"));
             		}
             	}
             	if(tag.toString().equalsIgnoreCase("SEPARATE")) {
-            		if(HavenElytra.config.GetBool("separate")) { UpdateGUI(Menu.separate); return; }
-            		else { 
+            		if(player.hasPermission("havenelytra.separate")) {
+            			if(HavenElytra.config.GetBool("separate")) { UpdateGUI(Menu.separate); return; }
+            			else { 
             			player.sendMessage(Lang.Get("separate-disabled"));
+            			}
+            		}else {
+            			player.sendMessage(Lang.Get("no-permission"));
             		}
             	}
             }
@@ -234,7 +240,8 @@ public class GUI implements Listener {
             				}
             			}
             			lore.add("§r");
-            			lore.add("§7+ [" + chestplateName + "§7]");
+            			lore.add(Lang.Get("combined-elytra-lore", chestplateName));
+            			//lore.add("§7+ [" + chestplateName + "§7]");
             			ItemMeta chestMeta = chestplate.getItemMeta();
             			chestMeta.setDisplayName(elytraName);
             			chestMeta.setLore(lore);

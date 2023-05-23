@@ -38,29 +38,33 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 		main.AddValidationEntry("gui-name", "&a&lHaven Elytra");
 		main.AddValidationEntry("gui-size", 27);
 		main.AddValidationEntry("gui", "");
-		main.AddValidationEntry("filler", "default");
+		main.AddValidationEntry("filler", "BLACK_STAINED_GLASS_PANE");
 
 		//Combine
 		Config combine = new Config(this, "gui-combine.yml");
 		combine.AddValidationEntry("sound", "BLOCK_ANVIL_USE");
 		combine.AddValidationEntry("gui-name", "&aCombination");
 		combine.AddValidationEntry("gui", "");
-		combine.AddValidationEntry("filler", "default");
+		combine.AddValidationEntry("filler", "BLACK_STAINED_GLASS_PANE");
 
 		//Separate
 		Config separate = new Config(this, "gui-separate.yml");
 		separate.AddValidationEntry("sound", "BLOCK_ANVIL_USE");
 		separate.AddValidationEntry("gui-name", "&cSeparation");
 		separate.AddValidationEntry("gui", "");
-		separate.AddValidationEntry("filler", "default");
+		separate.AddValidationEntry("filler", "BLACK_STAINED_GLASS_PANE");
 		
 		//Lang
+		Lang.messages.AddValidationEntry("no-permission", "&cSorry, you do not have permission to do this.");
 		Lang.messages.AddValidationEntry("combine-success", "%plugin% &aCombination success!");
 		Lang.messages.AddValidationEntry("combine-fail", "%plugin% &cCombination failed!\nElytra missing, or is already combined.");
 		Lang.messages.AddValidationEntry("combine-disabled", "%plugin% &cCombination is disabled.");
+		Lang.messages.AddValidationEntry("combined-elytra-lore", "&7+ [%s&7]");
 		Lang.messages.AddValidationEntry("separate-success", "%plugin% &aSeparation success!");
 		Lang.messages.AddValidationEntry("separate-fail", "%plugin% &cCombination failed!\nElytra missing, or is not combined.");
 		Lang.messages.AddValidationEntry("separate-disabled", "%plugin% &cSeparation is disabled.");
+		
+		//Lang.messages.Validate();
 
 		CommandListener.onEnable();
 		

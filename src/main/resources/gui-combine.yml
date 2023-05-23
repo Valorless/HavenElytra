@@ -8,13 +8,8 @@
 sound: 'BLOCK_ANVIL_USE'
 # Sounds @ https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
 
-# Name of the container.
-gui-name: '&aCombination'
-
-# none = AIR
-# default = BLACK_STAINED_GLASS_PANE
-# barrier = BARRIER (CustomModelData: 80000) - Used for custom textures with CustomModelData
-filler: 'default'
+# Set to AIR to remove filler blocks
+filler: 'BLACK_STAINED_GLASS_PANE'
 
 # Undefined slots will by default be black stained glass panes with blank names.
 # ### Tags ###

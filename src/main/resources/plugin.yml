@@ -20,7 +20,15 @@ permissions:
     description: Gives access to all HavenElytra commands.
     children:
       havenelytra.reload: true
+      havenelytra.combine: true
+      havenelytra.separate: true
   havenelytra.reload:
     description: Allows you to reload the configuration.
+    default: op
+  havenelytra.combine:
+    description: Allows you to combine elytras.
+    default: op
+  havenelytra.separate:
+    description: Allows you to separate elytras.
     default: op
   
