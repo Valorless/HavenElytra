@@ -23,18 +23,6 @@ filler: 'default'
 # RESULT - Slot for the combined Elytra.
 # BACK - Marks this slot as a button to open the Main menu.
 gui:
-  '0':
-    name: §f
-    item: LIME_STAINED_GLASS_PANE
-    lore: []
-    interact: false
-    tag: ''
-  '8':
-    name: §f
-    item: LIME_STAINED_GLASS_PANE
-    lore: []
-    interact: false
-    tag: ''
   '1':
     name: §e§lInfo
     item: IRON_CHESTPLATE
@@ -69,14 +57,6 @@ gui:
     lore: []
     interact: true
     tag: RESULT
-  '22':
-    name: §a§lMerge
-    item: LIME_STAINED_GLASS_PANE
-    lore:
-      - '§fClick here to'
-      - '§fcombine the items.'
-    interact: false
-    tag: CONFIRM
   '18':
     name: §e§lBack
     item: YELLOW_STAINED_GLASS_PANE
@@ -85,11 +65,13 @@ gui:
     interact: false
     tag: BACK
   '26':
-    name: §f
+    name: §a§lMerge
     item: LIME_STAINED_GLASS_PANE
-    lore: []
+    lore:
+      - '§fClick here to'
+      - '§fcombine the items.'
     interact: false
-    tag: ''
+    tag: CONFIRM
 
 # ## EXAMPLE ##
 # gui:

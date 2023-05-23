@@ -23,18 +23,6 @@ filler: 'default'
 # RESULT - Slot for the player's item. return these slots to the player upon closing inventory. Used for the seperation items.
 # BACK - Marks this slot as a button to open the Main menu.
 gui:
-  '0':
-    name: §f
-    item: LIME_STAINED_GLASS_PANE
-    lore: []
-    interact: false
-    tag: ''
-  '8':
-    name: §f
-    item: LIME_STAINED_GLASS_PANE
-    lore: []
-    interact: false
-    tag: ''
   '1':
     name: §e§lInfo
     item: ELYTRA
@@ -63,11 +51,12 @@ gui:
     tag: RESULT
   '18':
     name: §e§lBack
-    item: BARRIER
+    item: YELLOW_STAINED_GLASS_PANE
     lore:
       - '§fClick to go back.'
     interact: false
     tag: BACK
+  '26':
     name: §c§lSeperate
     item: RED_STAINED_GLASS_PANE
     lore:
@@ -75,19 +64,6 @@ gui:
       - '§fseperate the items.'
     interact: false
     tag: CONFIRM
-  '18':
-    name: §e§lBack
-    item: YELLOW_STAINED_GLASS_PANE
-    lore:
-      - '§fClick to go back.'
-    interact: false
-    tag: BACK
-  '26':
-    name: §f
-    item: LIME_STAINED_GLASS_PANE
-    lore: []
-    interact: false
-    tag: ''
 
 # ## EXAMPLE ##
 # gui:
