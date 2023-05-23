@@ -9,6 +9,7 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import valorless.valorlessutils.ValorlessUtils.*;
+import valorless.valorlessutils.config.Config;
 
 public class CommandListener implements Listener {
 	public static JavaPlugin plugin;
@@ -50,9 +51,12 @@ public class CommandListener implements Listener {
 			if (args.length >= 2){
 				if(args[1].equalsIgnoreCase("reload") && sender.hasPermission("havenelytra.reload")) {
 					HavenElytra.config.Reload();
-					ItemMerge.config.Reload();
-					ItemSplit.config.Reload();
-					ItemGUI.config.Reload();
+					Config ItemMerge = new Config(plugin, "gui-combine.yml");
+					ItemMerge.Reload();
+					Config ItemSplit = new Config(plugin, "gui-separate.yml");
+					ItemSplit.Reload();
+					Config ItemGUI = new Config(plugin, "gui-main.yml");
+					ItemGUI.Reload();
 					Lang.messages.Reload();
 					sender.sendMessage(Name +" §aReloaded.");
 					if(!console) { Log.Info(plugin, Name + " §aReloaded!"); }

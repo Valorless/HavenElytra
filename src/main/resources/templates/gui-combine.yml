@@ -1,0 +1,103 @@
+############################################################
+# +------------------------------------------------------+ #
+# | Combine | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Sound played when items combine.
+sound: 'BLOCK_ANVIL_USE'
+# Sounds @ https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+
+# Name of the container.
+gui-name: '&aCombination'
+
+# none = AIR
+# default = BLACK_STAINED_GLASS_PANE
+# barrier = BARRIER (CustomModelData: 80000) - Used for custom textures with CustomModelData
+filler: 'default'
+
+# Undefined slots will by default be black stained glass panes with blank names.
+# ### Tags ###
+# PLAYER - Slot for the player's item. return these slots to the player upon closing inventory. !IMPORTANT only 2 of these, always chestplate first.
+# CONFIRM - Marks this slot as a button to confirm merging.
+# RESULT - Slot for the combined Elytra.
+# BACK - Marks this slot as a button to open the Main menu.
+gui:
+  '0':
+    name: §f
+    item: LIME_STAINED_GLASS_PANE
+    lore: []
+    interact: false
+    tag: ''
+  '8':
+    name: §f
+    item: LIME_STAINED_GLASS_PANE
+    lore: []
+    interact: false
+    tag: ''
+  '1':
+    name: §e§lInfo
+    item: IRON_CHESTPLATE
+    lore:
+      - '§fPlace your chestplate in the'
+      - '§fempty slot below.'
+    interact: false
+    tag: ''
+  '4':
+    name: §e§lInfo
+    item: ELYTRA
+    lore:
+      - '§fPlace the elytra you wish to combine'
+      - '§fwith in the empty slot below.'
+    interact: false
+    tag: ''
+  '10':
+    name: Chestplate
+    item: AIR
+    lore: []
+    interact: true
+    tag: PLAYER
+  '13':
+    name: Elytra
+    item: AIR
+    lore: []
+    interact: true
+    tag: PLAYER
+  '16':
+    name: Result
+    item: AIR
+    lore: []
+    interact: true
+    tag: RESULT
+  '22':
+    name: §a§lMerge
+    item: LIME_STAINED_GLASS_PANE
+    lore:
+      - '§fClick here to'
+      - '§fcombine the items.'
+    interact: false
+    tag: CONFIRM
+  '18':
+    name: §e§lBack
+    item: YELLOW_STAINED_GLASS_PANE
+    lore:
+      - '§fClick to go back.'
+    interact: false
+    tag: BACK
+  '26':
+    name: §f
+    item: LIME_STAINED_GLASS_PANE
+    lore: []
+    interact: false
+    tag: ''
+
+# ## EXAMPLE ##
+# gui:
+#   '22':
+#     name: Merge
+#     item: LIME_STAINED_GLASS_PANE
+#     lore:
+#       - ''
+#     interact: false
+#     tag: CONFIRM
+#     custom-model-data: 0

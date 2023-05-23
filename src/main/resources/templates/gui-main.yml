@@ -1,0 +1,74 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                      Main GUI                        | #
+# +------------------------------------------------------+ #
+############################################################
+
+sound: 'ENTITY_PLAYER_LEVELUP'
+# Sounds @ https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+
+# Name of the container.
+gui-name: '&aHaven&bElytra'
+
+# Size for custom inventory must be a multiple of 9 between 9 and 54 slots
+# Essentially: 9 times how many rows. 9 = 1 row, 18 = 2 rows.
+gui-size: 27
+
+# none = AIR
+# default = BLACK_STAINED_GLASS_PANE
+# barrier = BARRIER (CustomModelData: 80000) - Used for custom textures with CustomModelData
+filler: 'default'
+
+# Undefined slots will by default be black stained glass panes with blank names.
+# ### Tags ###
+# COMBINE - Marks this slot as a button to open the Combine menu.
+# SEPARATE - Marks this slot as a button to open the Separate menu.
+gui:
+  '0':
+    name: §f
+    item: LIME_STAINED_GLASS_PANE
+    lore: []
+    interact: false
+    tag: ''
+  '8':
+    name: §f
+    item: LIME_STAINED_GLASS_PANE
+    lore: []
+    interact: false
+    tag: ''
+  '12':
+    name: §aCombine
+    item: ANVIL
+    lore:
+      - '§fLeft-Click to open the combination menu.'
+    interact: false
+    tag: COMBINE
+  '14':
+    name: §cSeparate
+    item: GRINDSTONE
+    lore:
+      - '§fLeft-Click to open the separation menu.'
+    interact: false
+    tag: SEPARATE
+  '18':
+    name: §f
+    item: LIME_STAINED_GLASS_PANE
+    lore: []
+    interact: false
+    tag: ''
+  '26':
+    name: §f
+    item: LIME_STAINED_GLASS_PANE
+    lore: []
+    interact: false
+    tag: ''
+
+# ## EXAMPLE ##
+# gui:
+#   '22':
+#     name: Merge
+#     item: LIME_STAINED_GLASS_PANE
+#     lore:
+#       - ''
+#     interact: false
+#     tag: CONFIRM

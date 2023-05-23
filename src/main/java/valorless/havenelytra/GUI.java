@@ -3,6 +3,7 @@ package valorless.havenelytra;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -24,6 +25,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.google.common.collect.Multimap;
 
 import valorless.valorlessutils.ValorlessUtils.Log;
 import valorless.valorlessutils.ValorlessUtils.Tags;
@@ -57,7 +60,7 @@ public class GUI implements Listener {
 		this.size = config.GetInt("gui-size");
 		inv = Bukkit.createInventory(player, size, Lang.Parse(config.GetString("gui-name")));
 		UpdateGUI(Menu.main);
-		SFX.Play(ItemGUI.config.GetString("sound"), 1f, 1f, player);
+		SFX.Play(config.GetString("sound"), 1f, 1f, player);
         OpenInventory(player);
     }
 	
@@ -235,9 +238,34 @@ public class GUI implements Listener {
             			ItemMeta chestMeta = chestplate.getItemMeta();
             			chestMeta.setDisplayName(elytraName);
             			chestMeta.setLore(lore);
-            			chestMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, GetModifier(chestplate, Attribute.GENERIC_ARMOR));
-            			chestMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, GetModifier(chestplate, Attribute.GENERIC_ARMOR_TOUGHNESS));
-            			chestMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, GetModifier(chestplate, Attribute.GENERIC_KNOCKBACK_RESISTANCE));
+            			
+            			//chestMeta.setAttributeModifiers(chestplate.getItemMeta().getAttributeModifiers());
+            			Multimap<Attribute, AttributeModifier> attr = chestMeta.getAttributeModifiers(EquipmentSlot.CHEST);
+            			while(attr == null) {
+            				//Basically to wait an extra frame to ensure it's not null.
+            				attr = chestMeta.getAttributeModifiers(EquipmentSlot.CHEST);
+            			}
+            			
+            			for (Entry<Attribute, AttributeModifier> attribute : attr.entries()) {
+            				try {
+            					chestMeta.addAttributeModifier(attribute.getKey(), attribute.getValue());
+            				} catch(Exception ex) {}
+            			}
+            			
+            			if(!attr.containsKey(Attribute.GENERIC_ARMOR)) {
+            				chestMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, GetModifier(chestplate, Attribute.GENERIC_ARMOR));
+            			}
+            			if(!attr.containsKey(Attribute.GENERIC_ARMOR_TOUGHNESS)) {
+            				chestMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, GetModifier(chestplate, Attribute.GENERIC_ARMOR_TOUGHNESS));
+            			}
+            			if(!attr.containsKey(Attribute.GENERIC_KNOCKBACK_RESISTANCE)) {
+            				chestMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, GetModifier(chestplate, Attribute.GENERIC_KNOCKBACK_RESISTANCE));
+            			}
+            			
+            			
+            			//chestMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, GetModifier(chestplate, Attribute.GENERIC_ARMOR));
+            			//chestMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, GetModifier(chestplate, Attribute.GENERIC_ARMOR_TOUGHNESS));
+            			//chestMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, GetModifier(chestplate, Attribute.GENERIC_KNOCKBACK_RESISTANCE));
             			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "combined", 1, PersistentDataType.INTEGER);
             			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "chestplate-type", chestplate.getType().toString(), PersistentDataType.STRING);
             			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "chestplate-name", chestplateName, PersistentDataType.STRING);
@@ -372,6 +400,10 @@ public class GUI implements Listener {
     		return new AttributeModifier(UUID.randomUUID(), "generic.knockback.resistance", amount, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.CHEST);
     	}
     	return null;
+    }
+    
+    public AttributeModifier GetModifier(ItemStack item, AttributeModifier attribute) {
+    	return new AttributeModifier(attribute.getUniqueId(), attribute.getName(), attribute.getAmount(), attribute.getOperation(), attribute.getSlot());
     }
     
     boolean ValidateChestplate(ItemStack chestplate) {

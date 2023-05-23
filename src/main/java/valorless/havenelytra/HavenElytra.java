@@ -24,41 +24,35 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 		CommandListener.plugin = this;
 		
 		GUI.plugin = this;
-		
-		ItemMerge.plugin = this;
-		ItemMerge.config = new Config(this, "gui-combine.yml");
-		
-		ItemSplit.plugin = this;
-		ItemSplit.config = new Config(this, "gui-separate.yml");
-		
-		ItemGUI.plugin = this;
-		ItemGUI.config = new Config(this, "gui-main.yml");
 	}
 	
 	@Override
     public void onEnable() {		
 		//Config
 		config.AddValidationEntry("combine", true);
-		config.AddValidationEntry("separate", false);
+		config.AddValidationEntry("separate", true);
 		
 		//Main GUI
-		ItemGUI.config.AddValidationEntry("sound", "ENTITY_PLAYER_LEVELUP");
-		ItemGUI.config.AddValidationEntry("gui-name", "&a&lHaven Elytra");
-		ItemGUI.config.AddValidationEntry("gui-size", 27);
-		ItemGUI.config.AddValidationEntry("gui", "");
-		ItemGUI.config.AddValidationEntry("filler", "default");
+		Config main = new Config(this, "gui-main.yml");
+		main.AddValidationEntry("sound", "ENTITY_PLAYER_LEVELUP");
+		main.AddValidationEntry("gui-name", "&a&lHaven Elytra");
+		main.AddValidationEntry("gui-size", 27);
+		main.AddValidationEntry("gui", "");
+		main.AddValidationEntry("filler", "default");
 
 		//Combine
-		ItemMerge.config.AddValidationEntry("sound", "BLOCK_ANVIL_USE");
-		ItemMerge.config.AddValidationEntry("gui-name", "&aCombination");
-		ItemMerge.config.AddValidationEntry("gui", "");
-		ItemGUI.config.AddValidationEntry("filler", "default");
+		Config combine = new Config(this, "gui-combine.yml");
+		combine.AddValidationEntry("sound", "BLOCK_ANVIL_USE");
+		combine.AddValidationEntry("gui-name", "&aCombination");
+		combine.AddValidationEntry("gui", "");
+		combine.AddValidationEntry("filler", "default");
 
 		//Separate
-		ItemSplit.config.AddValidationEntry("sound", "BLOCK_ANVIL_USE");
-		ItemSplit.config.AddValidationEntry("gui-name", "&cSeparation");
-		ItemSplit.config.AddValidationEntry("gui", "");
-		ItemGUI.config.AddValidationEntry("filler", "default");
+		Config separate = new Config(this, "gui-separate.yml");
+		separate.AddValidationEntry("sound", "BLOCK_ANVIL_USE");
+		separate.AddValidationEntry("gui-name", "&cSeparation");
+		separate.AddValidationEntry("gui", "");
+		separate.AddValidationEntry("filler", "default");
 		
 		//Lang
 		Lang.messages.AddValidationEntry("combine-success", "%plugin% &aCombination success!");

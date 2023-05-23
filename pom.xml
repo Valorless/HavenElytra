@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>valorless.havenelytra</groupId>
   <artifactId>HavenElytra</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
   <scm>
     <connection>scm:svn:http://127.0.0.1/dummy</connection>
     <developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>
@@ -123,7 +123,7 @@
        <dependency>
            <groupId>org.spigotmc</groupId>
            <artifactId>spigot-api</artifactId>
-           <version>1.18.2-R0.1-SNAPSHOT</version><!--change this value depending on the version or use LATEST-->
+           <version>1.19.4-R0.1-SNAPSHOT</version><!--change this value depending on the version or use LATEST-->
            <type>jar</type>
            <scope>provided</scope>
        </dependency>
