@@ -4,7 +4,9 @@
 # +------------------------------------------------------+ #
 ############################################################
 
-no-permission: '&cSorry, you do not have permission to do this.'
+no-permission: '%plugin% &cSorry, you do not have permission to do this.'
+
+material-disabled: '%plugin% &cThis type of chestplate cannot be used.'
 
 ############################################################
 # +------------------------------------------------------+ #

@@ -417,16 +417,26 @@ public class GUI implements Listener {
     	if(chestplate == null) {
     		return false;
     	}
-    	if(chestplate.getType() == Material.LEATHER_CHESTPLATE
-    			|| chestplate.getType() == Material.IRON_CHESTPLATE
-    			|| chestplate.getType() == Material.GOLDEN_CHESTPLATE
-    			|| chestplate.getType() == Material.CHAINMAIL_CHESTPLATE
-    			|| chestplate.getType() == Material.DIAMOND_CHESTPLATE
-    			|| chestplate.getType() == Material.NETHERITE_CHESTPLATE) { 
-    		return true;
-    	}
-    	else {
+    	if(chestplate.getType() == Material.LEATHER_CHESTPLATE && config.GetBool("leather") == false) {
+    		player.sendMessage(Lang.Get("material-disabled"));
     		return false;
+    	}else if(chestplate.getType() == Material.IRON_CHESTPLATE && config.GetBool("iron") == false) {
+    		player.sendMessage(Lang.Get("material-disabled"));
+    		return false;
+    	}else if(chestplate.getType() == Material.GOLDEN_CHESTPLATE && config.GetBool("gold") == false) {
+    		player.sendMessage(Lang.Get("material-disabled"));
+    		return false;
+    	}else if(chestplate.getType() == Material.CHAINMAIL_CHESTPLATE && config.GetBool("chainmail") == false) {
+    		player.sendMessage(Lang.Get("material-disabled"));
+    		return false;
+    	}else if(chestplate.getType() == Material.DIAMOND_CHESTPLATE && config.GetBool("diamond") == false) {
+    		player.sendMessage(Lang.Get("material-disabled"));
+    		return false;
+    	}else if(chestplate.getType() == Material.NETHERITE_CHESTPLATE && config.GetBool("netherite") == false) {
+    		player.sendMessage(Lang.Get("material-disabled"));
+    		return false;
+    	}else {
+    		return true;
     	}
     }
     

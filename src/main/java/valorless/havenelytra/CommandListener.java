@@ -51,12 +51,9 @@ public class CommandListener implements Listener {
 			if (args.length >= 2){
 				if(args[1].equalsIgnoreCase("reload") && sender.hasPermission("havenelytra.reload")) {
 					HavenElytra.config.Reload();
-					Config ItemMerge = new Config(plugin, "gui-combine.yml");
-					ItemMerge.Reload();
-					Config ItemSplit = new Config(plugin, "gui-separate.yml");
-					ItemSplit.Reload();
-					Config ItemGUI = new Config(plugin, "gui-main.yml");
-					ItemGUI.Reload();
+					HavenElytra.combine.Reload();
+					HavenElytra.separate.Reload();
+					HavenElytra.main.Reload();
 					Lang.messages.Reload();
 					sender.sendMessage(Name +" §aReloaded.");
 					if(!console) { Log.Info(plugin, Name + " §aReloaded!"); }

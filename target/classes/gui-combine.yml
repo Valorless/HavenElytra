@@ -11,6 +11,14 @@ sound: 'BLOCK_ANVIL_USE'
 # Set to AIR to remove filler blocks
 filler: 'BLACK_STAINED_GLASS_PANE'
 
+# What types of chestplates can be combined?
+leather: true
+iron: true
+gold: true
+chainmail: true
+diamond: true
+netherite: true
+
 # Undefined slots will by default be black stained glass panes with blank names.
 # ### Tags ###
 # PLAYER - Slot for the player's item. return these slots to the player upon closing inventory. !IMPORTANT only 2 of these, always chestplate first.
