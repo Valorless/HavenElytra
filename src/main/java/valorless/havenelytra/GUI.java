@@ -224,7 +224,7 @@ public class GUI implements Listener {
             			if(!Utils.IsStringNullOrEmpty(chestplate.getItemMeta().getDisplayName())) {
             				chestplateName = chestplate.getItemMeta().getDisplayName();
             			} else {
-            				chestplateName = "§e" + FixName(chestplate.getType().name().toLowerCase());
+            				chestplateName = FixName(chestplate.getType().name().toLowerCase());
             			}
             			String elytraName = elytra.getItemMeta().getDisplayName();
         				List<String> lore = new ArrayList<String>();

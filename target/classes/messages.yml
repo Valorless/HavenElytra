@@ -25,7 +25,7 @@ combine-disabled: '%plugin% &cCombination is disabled.'
 
 # Text written in the item's lore to tell what item it's bound with.
 # %s - Name of the Chestplate. 
-combined-elytra-lore: '§7+ [%s§7]'
+combined-elytra-lore: '§7+ [§e%s§7]'
 
 ############################################################
 # +------------------------------------------------------+ #
