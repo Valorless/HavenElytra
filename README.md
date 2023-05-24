@@ -52,27 +52,7 @@
 <details>
   <summary>GUI Example:</summary>
 
-```yaml
-main-gui:
-  '12':
-    name: §dCombine
-    item: ANVIL
-    lore:
-      - '§fLeft-Click to open the combination menu.'
-    interact: false
-    tag: COMBINE
-  '14':
-    name: §bSeparate
-    item: GRINDSTONE
-    lore:
-      - '§fLeft-Click to open the separation menu.'
-    interact: false
-    tag: SEPARATE
-
-```
-You can copy and use this as default.<br>
-The reason this is not default, is that if you don't define the ones default in the config file (I removed them all to avoid this),
-then any undefined slots would default to the plugin's internal default config.
+https://github.com/Valorless/HavenElytra/blob/main/src/main/resources/templates/gui-main.yml
 </details>
 
 ## Combine GUI
@@ -102,51 +82,7 @@ then any undefined slots would default to the plugin's internal default config.
 <details>
   <summary>GUI Example:</summary>
 
-```yaml
-combine-gui:
-  '12':
-    name: §e§lInfo
-    item: IRON_CHESTPLATE
-    lore:
-      - '§fPlace your chestplate in the'
-      - '§fempty slot underneath.'
-    interact: false
-    tag: ''
-  '14':
-    name: §e§lInfo
-    item: ELYTRA
-    lore:
-      - '§fPlace the elytra you wish'
-      - '§fto merge with.'
-    interact: false
-    tag: ''
-  '21':
-    name: Slot 1
-    item: AIR
-    lore:
-      - ''
-    interact: true
-    tag: PLAYER
-  '23':
-    name: Slot 2
-    item: AIR
-    lore:
-      - ''
-    interact: true
-    tag: PLAYER
-  '31':
-    name: §a§lMerge
-    item: LIME_STAINED_GLASS_PANE
-    lore:
-      - '§fClick here to'
-      - '§fcombine the items.'
-    interact: false
-    tag: CONFIRM
-
-```
-You can copy and use this as default.<br>
-The reason this is not default, is that if you don't define the ones default in the config file (I removed them all to avoid this),
-then any undefined slots would default to the plugin's internal default config.
+https://github.com/Valorless/HavenElytra/blob/main/src/main/resources/templates/gui-combine.yml
 </details>
 
 ## Separate GUI
@@ -176,41 +112,5 @@ then any undefined slots would default to the plugin's internal default config.
 <details>
   <summary>GUI Example:</summary>
 
-```yaml
-separate-gui:
-  '12':
-    name: §e§lInfo
-    item: ELYTRA
-    lore:
-      - '§fPlace your elytra in the'
-      - '§fempty slot to the right.'
-    interact: false
-    tag: ''
-  '13':
-    name: Slot 1
-    item: AIR
-    lore:
-      - ''
-    interact: true
-    tag: PLAYER
-  '22':
-    name: §c§lSeperate
-    item: RED_STAINED_GLASS_PANE
-    lore:
-      - '§fClick here to'
-      - '§fseperate the items.'
-    interact: false
-    tag: CONFIRM
-  '31':
-    name: Slot 2
-    item: AIR
-    lore:
-      - ''
-    interact: true
-    tag: PLAYER
-
-```
-You can copy and use this as default.<br>
-The reason this is not default, is that if you don't define the ones default in the config file (I removed them all to avoid this),
-then any undefined slots would default to the plugin's internal default config.
+https://github.com/Valorless/HavenElytra/blob/main/src/main/resources/templates/gui-separate.yml
 </details>
