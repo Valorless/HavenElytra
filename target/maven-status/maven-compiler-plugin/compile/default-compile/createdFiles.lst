@@ -2,6 +2,7 @@ valorless\havenelytra\GUI$Items.class
 valorless\havenelytra\Lang.class
 valorless\havenelytra\Menu.class
 valorless\havenelytra\SFX.class
+valorless\havenelytra\Lang$Language.class
 valorless\havenelytra\HavenElytra.class
 valorless\havenelytra\Lang$Placeholders.class
 valorless\havenelytra\CommandListener.class

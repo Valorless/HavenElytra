@@ -4,6 +4,10 @@
 # +------------------------------------------------------+ #
 ############################################################
 
+# What language the chestplates should translate to.
+# Supports: English, Danish, German, Turkish, Spanish, French.
+language: 'english'
+
 # Whether chestplates can be combined with elytras.
 combine: true
 

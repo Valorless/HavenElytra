@@ -35,6 +35,7 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 	@Override
     public void onEnable() {		
 		//Config
+		config.AddValidationEntry("language", "english");
 		config.AddValidationEntry("combine", true);
 		config.AddValidationEntry("separate", true);
 		config.Validate();

@@ -230,7 +230,7 @@ public class GUI implements Listener {
             			if(!Utils.IsStringNullOrEmpty(chestplate.getItemMeta().getDisplayName())) {
             				chestplateName = chestplate.getItemMeta().getDisplayName();
             			} else {
-            				chestplateName = FixName(chestplate.getType().name().toLowerCase());
+            				chestplateName = TranslateChestplateName(FixName(chestplate.getType().name().toLowerCase()));
             			}
             			String elytraName = elytra.getItemMeta().getDisplayName();
         				List<String> lore = new ArrayList<String>();
@@ -514,4 +514,10 @@ public class GUI implements Listener {
     	
     	return string;
     }	
+    
+    String TranslateChestplateName(String name) {
+    	return Lang.Translate(name);
+    }
+    
+    
 }
