@@ -58,7 +58,7 @@ public class GUI implements Listener {
 		this.player = player;
 		this.config = new Config(plugin, "gui-main.yml");
 		this.size = config.GetInt("gui-size");
-		inv = Bukkit.createInventory(player, size, Lang.Parse(config.GetString("gui-name")));
+		inv = Bukkit.createInventory(player, config.GetInt("gui-size"), Lang.Parse(config.GetString("gui-name")));
 		UpdateGUI(Menu.main);
 		SFX.Play(config.GetString("sound"), 1f, 1f, player);
         OpenInventory(player);
@@ -66,18 +66,24 @@ public class GUI implements Listener {
 	
 	public void UpdateGUI(Menu menu) {
 		//Log.Info(plugin, menu.toString());
+		
 		try {
 			this.menu = menu;
 			if(items != null) items.clear();
 			if(inv != null) inv.clear();
 			config = new Config(plugin, "gui-" + menu.toString() + ".yml");
+			//Rename(player, Lang.Parse(config.GetString("gui-name")));
     		InitializeLists();
+    		//while(inv != null) { inv = null; }
+    		inv = Bukkit.createInventory(player, config.GetInt("gui-size"), Lang.Parse(config.GetString("gui-name")));
+    		player.openInventory(inv);
     		//inv = Bukkit.createInventory(player, config.GetInt("gui-size"), Lang.Parse(config.GetString("gui-name")));
         	filler = config.GetString("filler");
         	InitializeItems();
 		} catch(Exception e) {
 			Log.Error(plugin, e.getMessage());
 		}
+		
 	}
 	
 	public void InitializeLists() {
@@ -507,6 +513,5 @@ public class GUI implements Listener {
         string = String.valueOf(charArray);
     	
     	return string;
-    }
-	
+    }	
 }

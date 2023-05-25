@@ -49,6 +49,8 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 
 		//Combine
 		combine.AddValidationEntry("sound", "BLOCK_ANVIL_USE");
+		main.AddValidationEntry("gui-name", "&aCombination");
+		main.AddValidationEntry("gui-size", 27);
 		combine.AddValidationEntry("gui", "");
 		combine.AddValidationEntry("filler", "BLACK_STAINED_GLASS_PANE");
 		combine.AddValidationEntry("leather", true);
@@ -61,6 +63,8 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 
 		//Separate
 		separate.AddValidationEntry("sound", "BLOCK_ANVIL_USE");
+		main.AddValidationEntry("gui-name", "&cSeparation");
+		main.AddValidationEntry("gui-size", 27);
 		separate.AddValidationEntry("gui", "");
 		separate.AddValidationEntry("filler", "BLACK_STAINED_GLASS_PANE");
 		separate.Validate();

@@ -8,6 +8,13 @@
 sound: 'BLOCK_ANVIL_USE'
 # Sounds @ https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
 
+# Name of the container.
+gui-name: '&aCombination'
+
+# Size for custom inventory must be a multiple of 9 between 9 and 54 slots
+# Essentially: 9 times how many rows. 9 = 1 row, 18 = 2 rows.
+gui-size: 27
+
 # Set to AIR to remove filler blocks
 filler: 'BLACK_STAINED_GLASS_PANE'
 
