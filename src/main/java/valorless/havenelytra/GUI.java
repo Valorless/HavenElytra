@@ -110,7 +110,7 @@ public class GUI implements Listener {
     		if(!Utils.IsStringNullOrEmpty(items.get(i).item)) {
     			inv.setItem(i, CreateGuiItem(Material.getMaterial(items.get(i).item), items.get(i).name, items.get(i).interactable, items.get(i).tag, items.get(i).lore, items.get(i).customModelData));
     		} else {
-    			inv.setItem(i, CreateGuiItem(Material.getMaterial(filler), "§f", false, "", null, 80000));
+    			inv.setItem(i, CreateGuiItem(Material.getMaterial(filler.toUpperCase()), "§f", false, "", null, 80000));
     		}
     	}
     }

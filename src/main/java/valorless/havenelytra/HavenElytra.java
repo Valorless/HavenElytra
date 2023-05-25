@@ -1,6 +1,9 @@
 package valorless.havenelytra;
 
+import valorless.valorlessutils.ValorlessUtils.Log;
 import valorless.valorlessutils.config.Config;
+
+import java.io.File;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,6 +33,8 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 		CommandListener.plugin = this;
 		
 		GUI.plugin = this;
+		
+		CreateTemplates();
 	}
 	
 	@Override
@@ -97,5 +102,47 @@ public final class HavenElytra extends JavaPlugin implements Listener {
     	for (int i = 0; i < commands.length; i++) {
     		getCommand(commands[i]).setExecutor(this);
     	}
+    }
+    
+    public void CreateTemplates() {
+    	File templatesFolder = new File(plugin.getDataFolder() + "/templates");
+		if(!templatesFolder.exists()) {
+			Log.Warning(plugin, "No GUI templates found, creating new.");
+			Log.Warning(plugin, "/plugins/HavenElytra/templates/");
+        }
+		
+    	
+    	File mainTemplate = new File(plugin.getDataFolder() + "/templates/gui-main.yml");
+		if(!mainTemplate.exists()) {
+			try {
+				mainTemplate.getParentFile().mkdirs();
+			}
+			catch(Exception e){
+			
+			}
+	        plugin.saveResource("templates/gui-main.yml", false);
+        }
+		
+		File combineTemplate = new File(plugin.getDataFolder() + "/templates/gui-combine.yml");
+		if(!combineTemplate.exists()) {
+			try {
+				combineTemplate.getParentFile().mkdirs();
+			}
+			catch(Exception e){
+			
+			}
+	        plugin.saveResource("templates/gui-combine.yml", false);
+        }
+		
+		File separateTemplate = new File(plugin.getDataFolder() + "/templates/gui-separate.yml");
+		if(!separateTemplate.exists()) {
+			try {
+				separateTemplate.getParentFile().mkdirs();
+			}
+			catch(Exception e){
+			
+			}
+	        plugin.saveResource("templates/gui-separate.yml", false);
+        }
     }
 }

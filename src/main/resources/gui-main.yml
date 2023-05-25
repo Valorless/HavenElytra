@@ -12,11 +12,9 @@ gui-name: '&a&lHaven Elytra'
 
 # Size for custom inventory must be a multiple of 9 between 9 and 54 slots
 # Essentially: 9 times how many rows. 9 = 1 row, 18 = 2 rows.
-# This also controls the size of the other menus.
 gui-size: 27
 
 # Set to AIR to remove filler blocks
-# CAPS
 filler: 'BLACK_STAINED_GLASS_PANE'
 
 # Undefined slots will by default be black stained glass panes with blank names.
