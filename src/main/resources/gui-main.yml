@@ -16,6 +16,7 @@ gui-name: '&a&lHaven Elytra'
 gui-size: 27
 
 # Set to AIR to remove filler blocks
+# CAPS
 filler: 'BLACK_STAINED_GLASS_PANE'
 
 # Undefined slots will by default be black stained glass panes with blank names.

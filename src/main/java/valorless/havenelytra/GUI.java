@@ -109,10 +109,8 @@ public class GUI implements Listener {
     	for(int i = 0; i < items.size(); i++) {
     		if(!Utils.IsStringNullOrEmpty(items.get(i).item)) {
     			inv.setItem(i, CreateGuiItem(Material.getMaterial(items.get(i).item), items.get(i).name, items.get(i).interactable, items.get(i).tag, items.get(i).lore, items.get(i).customModelData));
-    		} else if(filler.equalsIgnoreCase("BARRIER")){
-    			inv.setItem(i, CreateGuiItem(Material.BARRIER, "§f", false, "", null, 80000));
     		} else {
-    			inv.setItem(i, CreateGuiItem(Material.getMaterial(filler), "§f", false, "", null, 0));
+    			inv.setItem(i, CreateGuiItem(Material.getMaterial(filler), "§f", false, "", null, 80000));
     		}
     	}
     }
@@ -121,8 +119,11 @@ public class GUI implements Listener {
         ItemStack item = new ItemStack(material, 1);
         ItemMeta meta = item.getItemMeta();
         if(meta != null) {
-        	meta.setDisplayName(name);
+        	meta.setDisplayName(Lang.Parse(name));
         	if(lore != null) {
+        		for(String entry : lore) {
+        			entry = Lang.Parse(entry);
+        		}
         		meta.setLore(lore);
         	}
         	
@@ -159,9 +160,23 @@ public class GUI implements Listener {
             			}
             		}
             	}
+            } else {
+            	if(player.getItemOnCursor() != null || !player.getItemOnCursor().getType().isAir()) {
+            		//Log.Error(plugin, String.valueOf(e.getRawSlot()));
+            		if(e.getRawSlot() <= items.size()-1 && e.getRawSlot() != -999) {
+            			if(Utils.IsStringNullOrEmpty(items.get(e.getRawSlot()).item)) {
+                    		//Log.Error(plugin, "pain");
+            				ItemStack i = player.getItemOnCursor();
+            				e.setCancelled(true);
+            				inv.setItem(e.getRawSlot(), null);
+            				player.setItemOnCursor(null);
+            				player.getInventory().addItem(i);
+            			}
+            		}
+            	}
             }
-
             if (clickedItem == null || clickedItem.getType().isAir()) return;
+            
             Object tag = Tags.Get(plugin, clickedItem.getItemMeta().getPersistentDataContainer(), "tag", PersistentDataType.STRING);
             if(tag == null) return;
             if(!Utils.IsStringNullOrEmpty(tag.toString())) {
@@ -191,6 +206,7 @@ public class GUI implements Listener {
         
         if(menu == Menu.combine) {
         	ItemStack clickedItem = e.getCurrentItem();
+        	if(e.getRawSlot() >= items.size()) { return; }
             if (clickedItem != null) {
             	if(clickedItem.hasItemMeta()) {
             		if(clickedItem.getItemMeta().getPersistentDataContainer().get(
@@ -198,6 +214,20 @@ public class GUI implements Listener {
             			if(clickedItem.getItemMeta().getPersistentDataContainer().get(
             			new NamespacedKey(plugin, "interact"), PersistentDataType.INTEGER) == 0) {
             				e.setCancelled(true);
+            			}
+            		}
+            	}
+            } else {
+            	if(player.getItemOnCursor() != null || !player.getItemOnCursor().getType().isAir()) {
+            		//Log.Error(plugin, String.valueOf(e.getRawSlot()));
+            		if(e.getRawSlot() <= items.size()-1 && e.getRawSlot() != -999) {
+            			if(Utils.IsStringNullOrEmpty(items.get(e.getRawSlot()).item)) {
+                    		//Log.Error(plugin, "pain");
+            				ItemStack i = player.getItemOnCursor();
+            				e.setCancelled(true);
+            				inv.setItem(e.getRawSlot(), null);
+            				player.setItemOnCursor(null);
+            				player.getInventory().addItem(i);
             			}
             		}
             	}
@@ -236,7 +266,7 @@ public class GUI implements Listener {
         				List<String> lore = new ArrayList<String>();
             			if(chestplate.getItemMeta().getLore() != null) {
             				for(String str : chestplate.getItemMeta().getLore()) {
-            					lore.add(str);
+            					lore.add(Lang.Parse(str));
             				}
             			}
             			if(elytra.getItemMeta().getLore() != null) {
@@ -313,6 +343,20 @@ public class GUI implements Listener {
             			if(clickedItem.getItemMeta().getPersistentDataContainer().get(
             			new NamespacedKey(plugin, "interact"), PersistentDataType.INTEGER) == 0) {
             				e.setCancelled(true);
+            			}
+            		}
+            	}
+            } else {
+            	if(player.getItemOnCursor() != null || !player.getItemOnCursor().getType().isAir()) {
+            		//Log.Error(plugin, String.valueOf(e.getRawSlot()));
+            		if(e.getRawSlot() <= items.size()-1 && e.getRawSlot() != -999) {
+            			if(Utils.IsStringNullOrEmpty(items.get(e.getRawSlot()).item)) {
+                    		//Log.Error(plugin, "pain");
+            				ItemStack i = player.getItemOnCursor();
+            				e.setCancelled(true);
+            				inv.setItem(e.getRawSlot(), null);
+            				player.setItemOnCursor(null);
+            				player.getInventory().addItem(i);
             			}
             		}
             	}

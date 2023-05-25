@@ -1,6 +1,12 @@
 package valorless.havenelytra;
 
 import valorless.valorlessutils.config.Config;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.bukkit.ChatColor;
+
 import valorless.valorlessutils.ValorlessUtils.Log;
 import valorless.valorlessutils.ValorlessUtils.Utils;
 
@@ -20,7 +26,7 @@ public class Lang {
 			text = text.replace("\\n", "\n");
 			if(text.contains("%plugin%")) { text = text.replace("%plugin%", Placeholders.plugin); }
 		}
-		return text;
+		return hex(text);
 	}
 	
 	public static String Get(String key) {
@@ -48,7 +54,7 @@ public class Lang {
 	}
 	
 	public static String Translate(String text) {
-		if(HavenElytra.config.GetString("language").equalsIgnoreCase("english")) {
+		if(HavenElytra.config.GetString("language").equalsIgnoreCase("danish")) {
 			text = text.replace("Leather Chestplate", "Lædertunika");
 			text = text.replace("Iron Chestplate", "Jernbrystplade");
 			text = text.replace("Golden Chestplate", "Guldbrystplade");
@@ -86,4 +92,23 @@ public class Lang {
 		}
 		return text;
 	}
+	
+	public static String hex(String message) {
+        Pattern pattern = Pattern.compile("#[a-fA-F0-9]{6}");
+        Matcher matcher = pattern.matcher(message);
+        while (matcher.find()) {
+            String hexCode = message.substring(matcher.start(), matcher.end());
+            String replaceSharp = hexCode.replace('#', 'x');
+           
+            char[] ch = replaceSharp.toCharArray();
+            StringBuilder builder = new StringBuilder("");
+            for (char c : ch) {
+                builder.append("&" + c);
+            }
+           
+            message = message.replace(hexCode, builder.toString());
+            matcher = pattern.matcher(message);
+        }
+        return ChatColor.translateAlternateColorCodes('&', message);
+    }
 }

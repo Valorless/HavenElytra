@@ -1,6 +1,6 @@
 name: HavenElytra
 main: valorless.havenelytra.HavenElytra
-version: 1.4.0.190
+version: 1.4.1.205
 author: Valorless
 depend: [ValorlessUtils]
 api-version: 1.18
