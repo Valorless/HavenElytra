@@ -160,10 +160,10 @@ public class GUI implements Listener {
             			}
             		}
             	}
-            } else {
+            }/* else {
             	if(player.getItemOnCursor() != null || !player.getItemOnCursor().getType().isAir()) {
             		//Log.Error(plugin, String.valueOf(e.getRawSlot()));
-            		if(e.getRawSlot() <= items.size()-1 && e.getRawSlot() != -999) {
+            		if(e.getRawSlot() < items.size() && e.getRawSlot() != -999) {
             			if(Utils.IsStringNullOrEmpty(items.get(e.getRawSlot()).item)) {
                     		//Log.Error(plugin, "pain");
             				ItemStack i = player.getItemOnCursor();
@@ -174,7 +174,7 @@ public class GUI implements Listener {
             			}
             		}
             	}
-            }
+            }*/
             if (clickedItem == null || clickedItem.getType().isAir()) return;
             
             Object tag = Tags.Get(plugin, clickedItem.getItemMeta().getPersistentDataContainer(), "tag", PersistentDataType.STRING);
@@ -217,10 +217,10 @@ public class GUI implements Listener {
             			}
             		}
             	}
-            } else {
+            }/* else {
             	if(player.getItemOnCursor() != null || !player.getItemOnCursor().getType().isAir()) {
             		//Log.Error(plugin, String.valueOf(e.getRawSlot()));
-            		if(e.getRawSlot() <= items.size()-1 && e.getRawSlot() != -999) {
+            		if(e.getRawSlot() < items.size() && e.getRawSlot() != -999) {
             			if(Utils.IsStringNullOrEmpty(items.get(e.getRawSlot()).item)) {
                     		//Log.Error(plugin, "pain");
             				ItemStack i = player.getItemOnCursor();
@@ -231,11 +231,11 @@ public class GUI implements Listener {
             			}
             		}
             	}
-            }
+            }*/
             if (clickedItem == null || clickedItem.getType().isAir()) return;
             
         	List<Integer> slots = new ArrayList<Integer>();
-            if(e.getRawSlot() <= items.size()-1) {
+            if(e.getRawSlot() < items.size()) {
             	if(items.get(e.getRawSlot()).tag.equalsIgnoreCase("BACK")) {
                     ReturnItems();
             		UpdateGUI(Menu.main);
@@ -346,10 +346,10 @@ public class GUI implements Listener {
             			}
             		}
             	}
-            } else {
+            }/* else {
             	if(player.getItemOnCursor() != null || !player.getItemOnCursor().getType().isAir()) {
             		//Log.Error(plugin, String.valueOf(e.getRawSlot()));
-            		if(e.getRawSlot() <= items.size()-1 && e.getRawSlot() != -999) {
+            		if(e.getRawSlot() < items.size() && e.getRawSlot() != -999) {
             			if(Utils.IsStringNullOrEmpty(items.get(e.getRawSlot()).item)) {
                     		//Log.Error(plugin, "pain");
             				ItemStack i = player.getItemOnCursor();
@@ -360,11 +360,11 @@ public class GUI implements Listener {
             			}
             		}
             	}
-            }
+            }*/
             if (clickedItem == null || clickedItem.getType().isAir()) return;
             
         	List<Integer> slots = new ArrayList<Integer>();
-            if(e.getRawSlot() <= items.size()-1) {
+            if(e.getRawSlot() < items.size()) {
             	if(items.get(e.getRawSlot()).tag.equalsIgnoreCase("BACK")) {
                     ReturnItems();
             		UpdateGUI(Menu.main);
