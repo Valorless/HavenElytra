@@ -8,10 +8,11 @@ sound: 'ENTITY_PLAYER_LEVELUP'
 # Sounds @ https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
 
 # Name of the container.
-gui-name: '&aHaven&bElytra'
+gui-name: '&a&lHaven Elytra'
 
 # Size for custom inventory must be a multiple of 9 between 9 and 54 slots
 # Essentially: 9 times how many rows. 9 = 1 row, 18 = 2 rows.
+# This also controls the size of the other menus.
 gui-size: 27
 
 # Set to AIR to remove filler blocks
@@ -23,50 +24,21 @@ filler: 'BLACK_STAINED_GLASS_PANE'
 # SEPARATE - Marks this slot as a button to open the Separate menu.
 gui:
   '0':
-    name: §f
-    item: LIME_STAINED_GLASS_PANE
-    lore: []
-    interact: false
-    tag: ''
-  '8':
-    name: §f
-    item: LIME_STAINED_GLASS_PANE
-    lore: []
-    interact: false
-    tag: ''
-  '12':
-    name: §aCombine
-    item: ANVIL
+    name: ''
+    item: ''
     lore:
-      - '§fLeft-Click to open the combination menu.'
-    interact: false
-    tag: COMBINE
-  '14':
-    name: §cSeparate
-    item: GRINDSTONE
-    lore:
-      - '§fLeft-Click to open the separation menu.'
-    interact: false
-    tag: SEPARATE
-  '18':
-    name: §f
-    item: LIME_STAINED_GLASS_PANE
-    lore: []
+      - ''
     interact: false
     tag: ''
-  '26':
-    name: §f
-    item: LIME_STAINED_GLASS_PANE
-    lore: []
-    interact: false
-    tag: ''
-
+    
 # ## EXAMPLE ##
 # gui:
 #   '22':
 #     name: Merge
 #     item: LIME_STAINED_GLASS_PANE
-#     lore:
-#       - ''
+#     lore1: ''
+#     lore2: ''
 #     interact: false
 #     tag: CONFIRM
+#     custom-model-data: 0
+  

@@ -5,68 +5,41 @@
 ############################################################
 
 # Sound played when items combine.
-sound: 'BLOCK_ANVIL_USE'
+sound: 'ENTITY_PLAYER_LEVELUP'
 # Sounds @ https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+
+# Name of the container.
+gui-name: '&cSeparation'
+
+# Size for custom inventory must be a multiple of 9 between 9 and 54 slots
+# Essentially: 9 times how many rows. 9 = 1 row, 18 = 2 rows.
+gui-size: 27
 
 # Set to AIR to remove filler blocks
 filler: 'BLACK_STAINED_GLASS_PANE'
 
 # Undefined slots will by default be black stained glass panes with blank names.
 # ### Tags ###
-# PLAYER - Slot for the player's item. return these slots to the player upon closing inventory. !IMPORTANT only 2 of these, always elytra first.
+# PLAYER - Slot for the player's item. return these slots to the player upon closing inventory.
 # CONFIRM - Marks this slot as a button to confirm merging.
 # RESULT - Slot for the player's item. return these slots to the player upon closing inventory. Used for the seperation items.
 # BACK - Marks this slot as a button to open the Main menu.
 gui:
-  '1':
-    name: §e§lInfo
-    item: ELYTRA
+  '0':
+    name: ''
+    item: ''
     lore:
-      - '§fPlace your elytra in the'
-      - '§fempty slot to the below.'
+      - ''
     interact: false
     tag: ''
-  '10':
-    name: Combined Elytra
-    item: AIR
-    lore: []
-    interact: true
-    tag: PLAYER
-  '13':
-    name: Chestplate
-    item: AIR
-    lore: []
-    interact: true
-    tag: RESULT
-  '16':
-    name: Elytra
-    item: AIR
-    lore: []
-    interact: true
-    tag: RESULT
-  '18':
-    name: §e§lBack
-    item: YELLOW_STAINED_GLASS_PANE
-    lore:
-      - '§fClick to go back.'
-    interact: false
-    tag: BACK
-  '26':
-    name: §c§lSeperate
-    item: RED_STAINED_GLASS_PANE
-    lore:
-      - '§fClick here to'
-      - '§fseperate the items.'
-    interact: false
-    tag: CONFIRM
-
+    
 # ## EXAMPLE ##
 # gui:
 #   '22':
 #     name: Merge
 #     item: LIME_STAINED_GLASS_PANE
-#     lore:
-#       - ''
+#     lore1: ''
+#     lore2: ''
 #     interact: false
 #     tag: CONFIRM
 #     custom-model-data: 0

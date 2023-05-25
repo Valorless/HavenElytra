@@ -8,8 +8,23 @@
 sound: 'BLOCK_ANVIL_USE'
 # Sounds @ https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
 
+# Name of the container.
+gui-name: '&aCombination'
+
+# Size for custom inventory must be a multiple of 9 between 9 and 54 slots
+# Essentially: 9 times how many rows. 9 = 1 row, 18 = 2 rows.
+gui-size: 27
+
 # Set to AIR to remove filler blocks
 filler: 'BLACK_STAINED_GLASS_PANE'
+
+# What types of chestplates can be combined?
+leather: true
+iron: true
+gold: true
+chainmail: true
+diamond: true
+netherite: true
 
 # Undefined slots will by default be black stained glass panes with blank names.
 # ### Tags ###
@@ -18,63 +33,22 @@ filler: 'BLACK_STAINED_GLASS_PANE'
 # RESULT - Slot for the combined Elytra.
 # BACK - Marks this slot as a button to open the Main menu.
 gui:
-  '1':
-    name: §e§lInfo
-    item: IRON_CHESTPLATE
+  '0':
+    name: ''
+    item: ''
     lore:
-      - '§fPlace your chestplate in the'
-      - '§fempty slot below.'
+      - ''
     interact: false
     tag: ''
-  '4':
-    name: §e§lInfo
-    item: ELYTRA
-    lore:
-      - '§fPlace the elytra you wish to combine'
-      - '§fwith in the empty slot below.'
-    interact: false
-    tag: ''
-  '10':
-    name: Chestplate
-    item: AIR
-    lore: []
-    interact: true
-    tag: PLAYER
-  '13':
-    name: Elytra
-    item: AIR
-    lore: []
-    interact: true
-    tag: PLAYER
-  '16':
-    name: Result
-    item: AIR
-    lore: []
-    interact: true
-    tag: RESULT
-  '18':
-    name: §e§lBack
-    item: YELLOW_STAINED_GLASS_PANE
-    lore:
-      - '§fClick to go back.'
-    interact: false
-    tag: BACK
-  '26':
-    name: §a§lMerge
-    item: LIME_STAINED_GLASS_PANE
-    lore:
-      - '§fClick here to'
-      - '§fcombine the items.'
-    interact: false
-    tag: CONFIRM
-
+    
 # ## EXAMPLE ##
 # gui:
 #   '22':
 #     name: Merge
 #     item: LIME_STAINED_GLASS_PANE
-#     lore:
-#       - ''
+#     lore1: ''
+#     lore2: ''
 #     interact: false
 #     tag: CONFIRM
 #     custom-model-data: 0
+  
