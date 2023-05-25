@@ -1,11 +1,11 @@
-############################################################
+# ###########################################################
 # +------------------------------------------------------+ #
 # |                       Combine                        | #
 # +------------------------------------------------------+ #
-############################################################
+# ###########################################################
 
 # Sound played when items combine.
-sound: 'BLOCK_ANVIL_USE'
+sound: BLOCK_ANVIL_USE
 # Sounds @ https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
 
 # Name of the container.
@@ -33,22 +33,63 @@ netherite: true
 # RESULT - Slot for the combined Elytra.
 # BACK - Marks this slot as a button to open the Main menu.
 gui:
-  '0':
-    name: ''
-    item: ''
+  '1':
+    name: §e§lInfo
+    item: IRON_CHESTPLATE
     lore:
-      - ''
+    - §fPlace your chestplate in the
+    - §fempty slot below.
     interact: false
     tag: ''
-    
+  '4':
+    name: §e§lInfo
+    item: ELYTRA
+    lore:
+    - §fPlace the elytra you wish to combine
+    - §fwith in the empty slot below.
+    interact: false
+    tag: ''
+  '10':
+    name: Chestplate
+    item: AIR
+    lore: []
+    interact: true
+    tag: PLAYER
+  '13':
+    name: Elytra
+    item: AIR
+    lore: []
+    interact: true
+    tag: PLAYER
+  '16':
+    name: Result
+    item: AIR
+    lore: []
+    interact: true
+    tag: RESULT
+  '18':
+    name: §e§lBack
+    item: YELLOW_STAINED_GLASS_PANE
+    lore:
+    - §fClick to go back.
+    interact: false
+    tag: BACK
+  '26':
+    name: §a§lMerge
+    item: LIME_STAINED_GLASS_PANE
+    lore:
+    - §fClick here to
+    - §fcombine the items.
+    interact: false
+    tag: CONFIRM
+
 # ## EXAMPLE ##
 # gui:
 #   '22':
 #     name: Merge
 #     item: LIME_STAINED_GLASS_PANE
-#     lore1: ''
-#     lore2: ''
+#     lore:
+#       - ''
 #     interact: false
 #     tag: CONFIRM
 #     custom-model-data: 0
-  
