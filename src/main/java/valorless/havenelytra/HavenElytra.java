@@ -38,11 +38,14 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 	}
 	
 	@Override
-    public void onEnable() {		
+    public void onEnable() {
+		Log.Debug(plugin, "HavenElytra Debugging Enabled!");
+		
 		//Config
 		config.AddValidationEntry("language", "english");
 		config.AddValidationEntry("combine", true);
 		config.AddValidationEntry("separate", true);
+		Log.Debug(plugin, "Validating config.yml");
 		config.Validate();
 		
 		//Main GUI
@@ -51,6 +54,7 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 		main.AddValidationEntry("gui-size", 27);
 		main.AddValidationEntry("gui", "");
 		main.AddValidationEntry("filler", "BLACK_STAINED_GLASS_PANE");
+		Log.Debug(plugin, "Validating gui-main.yml");
 		main.Validate();
 
 		//Combine
@@ -65,6 +69,7 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 		combine.AddValidationEntry("chainmail", true);
 		combine.AddValidationEntry("diamond", true);
 		combine.AddValidationEntry("netherite", true);
+		Log.Debug(plugin, "Validating gui-combine.yml");
 		combine.Validate();
 
 		//Separate
@@ -73,6 +78,7 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 		separate.AddValidationEntry("gui-size", 27);
 		separate.AddValidationEntry("gui", "");
 		separate.AddValidationEntry("filler", "BLACK_STAINED_GLASS_PANE");
+		Log.Debug(plugin, "Validating gui-separate.yml");
 		separate.Validate();
 		
 		//Lang
@@ -85,6 +91,7 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 		Lang.messages.AddValidationEntry("separate-fail", "%plugin% &cCombination failed!\nElytra missing, or is not combined.");
 		Lang.messages.AddValidationEntry("separate-disabled", "%plugin% &cSeparation is disabled.");
 		Lang.messages.AddValidationEntry("material-disabled", "%plugin% &cThis type of chestplate cannot be used.");
+		Log.Debug(plugin, "Validating messages.yml");
 		Lang.messages.Validate();
 
 		CommandListener.onEnable();
@@ -100,11 +107,13 @@ public final class HavenElytra extends JavaPlugin implements Listener {
     
     public void RegisterCommands() {
     	for (int i = 0; i < commands.length; i++) {
+    		Log.Debug(plugin, "Registering Command: " + commands[i]);
     		getCommand(commands[i]).setExecutor(this);
     	}
     }
     
     public void CreateTemplates() {
+		Log.Debug(plugin, "Checking if gui templates exist");
     	File templatesFolder = new File(plugin.getDataFolder() + "/templates");
 		if(!templatesFolder.exists()) {
 			Log.Warning(plugin, "No GUI templates found, creating new.");
