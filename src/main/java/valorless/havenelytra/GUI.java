@@ -106,12 +106,19 @@ public class GUI implements Listener {
     }
     
 	public void InitializeItems() {
+		int g = 0;
     	for(int i = 0; i < items.size(); i++) {
     		if(!Utils.IsStringNullOrEmpty(items.get(i).item)) {
     			inv.setItem(i, CreateGuiItem(Material.getMaterial(items.get(i).item), items.get(i).name, items.get(i).interactable, items.get(i).tag, items.get(i).lore, items.get(i).customModelData));
+    			g++;
     		} else {
     			inv.setItem(i, CreateGuiItem(Material.getMaterial(filler.toUpperCase()), "§f", false, "", null, 80000));
+    			
     		}
+    	}
+    	if(g == 0) {
+    		Log.Error(plugin, String.format("GUI of 'gui-%s.yml' is empty. Consider using one of the templates!", menu));
+    		Log.Error(plugin, "This is not an error with the plugin, you have not set up the GUI like adviced on Spigot.");
     	}
     }
 	
@@ -312,6 +319,7 @@ public class GUI implements Listener {
             			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "combined", 1, PersistentDataType.INTEGER);
             			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "chestplate-type", chestplate.getType().toString(), PersistentDataType.STRING);
             			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "chestplate-name", chestplateName, PersistentDataType.STRING);
+            			chestMeta.setCustomModelData(null);
             			if(elytra.getItemMeta().hasCustomModelData()) {
             				chestMeta.setCustomModelData(elytra.getItemMeta().getCustomModelData());
             			}

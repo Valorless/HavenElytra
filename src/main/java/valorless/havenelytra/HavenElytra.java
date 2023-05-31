@@ -33,12 +33,11 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 		CommandListener.plugin = this;
 		
 		GUI.plugin = this;
-		
-		CreateTemplates();
 	}
 	
 	@Override
     public void onEnable() {
+		CreateTemplates();
 		Log.Debug(plugin, "HavenElytra Debugging Enabled!");
 		
 		//Config
