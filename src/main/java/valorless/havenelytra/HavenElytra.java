@@ -37,6 +37,11 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 	
 	@Override
     public void onEnable() {
+        // All you have to do is adding the following two lines in your onEnable method.
+        // You can find the plugin ids of your plugins on the page https://bstats.org/what-is-my-plugin-id
+        int pluginId = 18792; // <-- Replace with the id of your plugin!
+        Metrics metrics = new Metrics(this, pluginId);
+        
 		CreateTemplates();
 		Log.Debug(plugin, "HavenElytra Debugging Enabled!");
 		

@@ -9,7 +9,6 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import valorless.valorlessutils.ValorlessUtils.*;
-import valorless.valorlessutils.config.Config;
 
 public class CommandListener implements Listener {
 	public static JavaPlugin plugin;
