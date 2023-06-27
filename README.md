@@ -1,5 +1,5 @@
 # HavenElytra
-<a href="https://github.com/Valorless/HavenElytra" rel="nofollow"><img src="https://img.shields.io/badge/Versions-1.18%20--%201.19%2B-brightgreen?style=flat" alt="Versions-1.18%20--%201.19%2B" style="max-width: 100%;"/>
+<a href="https://github.com/Valorless/HavenElytra" rel="nofollow"><img src="https://img.shields.io/badge/Versions-1.18%20--%201.20%2B-brightgreen?style=flat" alt="Versions-1.18%20--%201.19%2B" style="max-width: 100%;"/>
 <a href="https://github.com/Valorless/ValorlessUtils" rel="nofollow"><img src="https://img.shields.io/badge/Requires-ValorlessUtils-red?style=flat" alt="Dependency" style="max-width: 100%;"/>
 <br>
 
