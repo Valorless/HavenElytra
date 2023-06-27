@@ -50,6 +50,8 @@ public final class Main extends JavaPlugin implements Listener {
 		Log.Debug(plugin, "HavenElytra Debugging Enabled!");
 		
 		//Config
+		config.AddValidationEntry("debug", false);
+		config.AddValidationEntry("check-updates", true);
 		config.AddValidationEntry("language", "en_us");
 		config.AddValidationEntry("combine", true);
 		config.AddValidationEntry("separate", true);
