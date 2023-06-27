@@ -1,5 +1,5 @@
 name: HavenElytra
-main: valorless.havenelytra.HavenElytra
+main: valorless.havenelytra.Main
 version: version-number
 author: Valorless
 depend: [ValorlessUtils]

@@ -2,13 +2,14 @@ package valorless.havenelytra;
 
 import valorless.valorlessutils.ValorlessUtils.Log;
 import valorless.valorlessutils.config.Config;
+import valorless.valorlessutils.translate.Translator;
 
 import java.io.File;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class HavenElytra extends JavaPlugin implements Listener {
+public final class Main extends JavaPlugin implements Listener {
 	public static JavaPlugin plugin;
 	//public static ItemMerge merger;
 	String Name = "§7[§aHaven§bElytra§7]§r";
@@ -16,6 +17,9 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 	public static Config main;
 	public static Config combine;
 	public static Config separate;
+	Boolean uptodate = true;
+	String newupdate = null;
+	public static Translator translator;
     
     public String[] commands = {
     		"havenelytra", "he"
@@ -46,7 +50,7 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 		Log.Debug(plugin, "HavenElytra Debugging Enabled!");
 		
 		//Config
-		config.AddValidationEntry("language", "english");
+		config.AddValidationEntry("language", "en_us");
 		config.AddValidationEntry("combine", true);
 		config.AddValidationEntry("separate", true);
 		Log.Debug(plugin, "Validating config.yml");
@@ -100,9 +104,29 @@ public final class HavenElytra extends JavaPlugin implements Listener {
 
 		CommandListener.onEnable();
 		
+		
 		getServer().getPluginManager().registerEvents(new CommandListener(), this);
 		
 		RegisterCommands();
+		
+		translator = new Translator(config.GetString("language"));
+		
+		if(config.GetBool("check-updates") == true) {
+			Log.Info(plugin, "Checking for updates..");
+			new UpdateChecker(this, 109583).getVersion(version -> {
+
+				newupdate = version;
+
+				if (!getDescription().getVersion().equals(version)) {
+					Log.Warning(plugin, String.format("An update has been found! (v%s, you are on v%s) \n", version, getDescription().getVersion()) + 
+							"This could be bug fixes or additional features.\n" + 
+							"Please update HavenBags at https://www.spigotmc.org/resources/109583/");
+					
+					uptodate = false;
+				}
+			});
+		}
+		
     }
     
     @Override

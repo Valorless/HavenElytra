@@ -9,6 +9,7 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import valorless.valorlessutils.ValorlessUtils.*;
+import valorless.valorlessutils.translate.Translator;
 
 public class CommandListener implements Listener {
 	public static JavaPlugin plugin;
@@ -49,11 +50,12 @@ public class CommandListener implements Listener {
 			else 
 			if (args.length >= 2){
 				if(args[1].equalsIgnoreCase("reload") && sender.hasPermission("havenelytra.reload")) {
-					HavenElytra.config.Reload();
-					HavenElytra.combine.Reload();
-					HavenElytra.separate.Reload();
-					HavenElytra.main.Reload();
+					Main.config.Reload();
+					Main.combine.Reload();
+					Main.separate.Reload();
+					Main.main.Reload();
 					Lang.messages.Reload();
+					Main.translator = new Translator(Main.config.GetString("language"));
 					sender.sendMessage(Name +" §aReloaded.");
 					if(!console) { Log.Info(plugin, Name + " §aReloaded!"); }
 				}

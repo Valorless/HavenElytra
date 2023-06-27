@@ -190,7 +190,7 @@ public class GUI implements Listener {
             	//Log.Info(plugin, tag);
             	if(tag.toString().equalsIgnoreCase("COMBINE")){
             		if(player.hasPermission("havenelytra.combine")) {
-            			if(HavenElytra.config.GetBool("combine")) { UpdateGUI(Menu.combine); return; }
+            			if(Main.config.GetBool("combine")) { UpdateGUI(Menu.combine); return; }
             			else { 
             				player.sendMessage(Lang.Get("combine-disabled"));
             			}
@@ -200,7 +200,7 @@ public class GUI implements Listener {
             	}
             	if(tag.toString().equalsIgnoreCase("SEPARATE")) {
             		if(player.hasPermission("havenelytra.separate")) {
-            			if(HavenElytra.config.GetBool("separate")) { UpdateGUI(Menu.separate); return; }
+            			if(Main.config.GetBool("separate")) { UpdateGUI(Menu.separate); return; }
             			else { 
             			player.sendMessage(Lang.Get("separate-disabled"));
             			}
@@ -267,7 +267,8 @@ public class GUI implements Listener {
             			if(!Utils.IsStringNullOrEmpty(chestplate.getItemMeta().getDisplayName())) {
             				chestplateName = chestplate.getItemMeta().getDisplayName();
             			} else {
-            				chestplateName = TranslateChestplateName(FixName(chestplate.getType().name().toLowerCase()));
+            				chestplateName = Main.translator.Translate(chestplate.getType().getTranslationKey());
+            				//chestplateName = TranslateChestplateName(FixName(chestplate.getType().name().toLowerCase()));
             			}
             			String elytraName = elytra.getItemMeta().getDisplayName();
         				List<String> lore = new ArrayList<String>();
@@ -565,10 +566,6 @@ public class GUI implements Listener {
         string = String.valueOf(charArray);
     	
     	return string;
-    }	
-    
-    String TranslateChestplateName(String name) {
-    	return Lang.Translate(name);
     }
     
     
