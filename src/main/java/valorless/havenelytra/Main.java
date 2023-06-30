@@ -6,7 +6,11 @@ import valorless.valorlessutils.translate.Translator;
 
 import java.io.File;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin implements Listener {
@@ -141,6 +145,22 @@ public final class Main extends JavaPlugin implements Listener {
     		getCommand(commands[i]).setExecutor(this);
     	}
     }
+
+
+	@EventHandler
+	public void UpdateNotification(PlayerJoinEvent e) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+		    public void run() {
+		    	if (config.GetBool("check-updates") && e.getPlayer().isOp() && uptodate == false) {
+					e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',
+						"&7[&aHaven&bElytra&7] " + "&fAn update has been found.\nPlease download version&a " + newupdate
+						+ ", &fyou are on version&a " + getDescription().getVersion() + "!"
+						));
+				}
+		    }
+		}, 5L);
+		
+	}
     
     public void CreateTemplates() {
 		Log.Debug(plugin, "Checking if gui templates exist");
