@@ -5,6 +5,8 @@ import valorless.valorlessutils.config.Config;
 import valorless.valorlessutils.translate.Translator;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,6 +26,7 @@ public final class Main extends JavaPlugin implements Listener {
 	Boolean uptodate = true;
 	String newupdate = null;
 	public static Translator translator;
+	public static List<GUI> openGUIs = new ArrayList<GUI>();
     
     public String[] commands = {
     		"havenelytra", "he"
@@ -105,6 +108,7 @@ public final class Main extends JavaPlugin implements Listener {
 		Lang.messages.AddValidationEntry("separate-fail", "%plugin% &cCombination failed!\nElytra missing, or is not combined.");
 		Lang.messages.AddValidationEntry("separate-disabled", "%plugin% &cSeparation is disabled.");
 		Lang.messages.AddValidationEntry("material-disabled", "%plugin% &cThis type of chestplate cannot be used.");
+		Lang.messages.AddValidationEntry("not-repaired", "%plugin% &cOne or more items are damaged.");
 		Log.Debug(plugin, "Validating messages.yml");
 		Lang.messages.Validate();
 
@@ -137,6 +141,11 @@ public final class Main extends JavaPlugin implements Listener {
     
     @Override
     public void onDisable() {
+    	if(openGUIs.size() > 0) {
+    		for(GUI gui : openGUIs) {
+    			gui.Close();
+    		}
+    	}
     }
     
     public void RegisterCommands() {

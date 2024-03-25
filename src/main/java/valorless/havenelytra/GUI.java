@@ -62,6 +62,7 @@ public class GUI implements Listener {
 		UpdateGUI(Menu.main);
 		SFX.Play(config.GetString("sound"), 1f, 1f, player);
         OpenInventory(player);
+        Main.openGUIs.add(this);
     }
 	
 	public void UpdateGUI(Menu menu) {
@@ -257,7 +258,15 @@ public class GUI implements Listener {
             	    }
             		ItemStack chestplate = e.getInventory().getItem(slots.get(0));
         			ItemStack elytra = e.getInventory().getItem(slots.get(1));
+        			
             		if(ValidateChestplate(chestplate) && ValidateElytra(elytra)) {
+            			
+            			if(IDamage.IsItemDamaged(chestplate) || IDamage.IsItemDamaged(elytra)) {
+            				player.sendMessage(Lang.Get("not-repaired"));
+            				e.setCancelled(true);
+            				return;
+            			}
+            			
             			ItemStack tempItem = new ItemStack(Material.ELYTRA);
             			ItemMeta tempStorage = tempItem.getItemMeta();
             			Tags.Set(plugin, tempStorage.getPersistentDataContainer(), "elytra-meta", JsonUtils.toJson(elytra.getItemMeta()), PersistentDataType.STRING);
@@ -413,14 +422,27 @@ public class GUI implements Listener {
     @EventHandler
     public void onInventoryClose(final InventoryCloseEvent e) {
         if (!e.getInventory().equals(inv)) return;
-        ReturnItems();
+        Close();
+    }
+    
+    public void Close() {
+    	if(Main.openGUIs.contains(this)) {
+    		ReturnItems();
+        	Main.openGUIs.remove(this);
+        	player.closeInventory();
+    	}
     }
     
     void ReturnItems() {
     	for (int i = 0; i < inv.getSize(); i++) {
         	if(inv.getItem(i) != null) {
         		if(items.get(i).tag.toString().equalsIgnoreCase("PLAYER") || items.get(i).tag.toString().equalsIgnoreCase("RESULT")) {
-        			player.getInventory().addItem(inv.getItem(i));
+        			if(player.getInventory().firstEmpty() != -1) {
+        				player.getInventory().addItem(inv.getItem(i));
+        	    	} else {
+        	    		player.getWorld().dropItem(player.getLocation(), inv.getItem(i));
+        	    	}
+        			
         		}
         	}
         }

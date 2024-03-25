@@ -8,6 +8,8 @@ no-permission: '%plugin% &cSorry, you do not have permission to do this.'
 
 material-disabled: '%plugin% &cThis type of chestplate cannot be used.'
 
+not-repaired: '%plugin% &cOne or more items are damaged.'
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                       Combine                        | #
