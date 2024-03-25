@@ -1,0 +1,39 @@
+HavenElytra v2.0.0.259
+
+!! Upgrading from HavenElytra v1 to v2 will require some manual config updating!
+Please take a backup before upgrading the plugin.
+(Changed requiring manual updating, is mainly changing messages.yml to lang.yml)
+
+HavenElytra has been rewritten using the latest version of ValorlessUtils, and newer methods I learned while developing other plugins.
+Many things have changed, such as how data is stored, how GUI is handled, and how the code is set up.
+This update required ValorlessUtils v1.5.8.219 or newer.
+
+Added: ValorlessUtils version is checked on load, to avoid incompatibility with older versions.
+
+Added: PlaceholderAPI support.
+
+Added: Command '/havenelytra convert' to convert v1 elytras to v2.
+THIS CANNOT BE UNDONE.
+In addition will the following message be sent, if a v1 elytra is being used: 'Please convert this elytra with /havenelytra convert.'
+
+Added: Language 'pl_pl' (Polish).
+
+Added: You can now set the volume and pitch of 'sound', in GUI files.
+
+Changed: messages.yml is now lang.yml.
+
+Changed: lang.yml entry 'combined-elytra-lore' no longer accepts '%s', but now uses '%chestplate%'.
+
+Changed: lang.yml entry 'combine-fail' has been changed to '%plugin% &cCombination failed!\nElytra is already combined.'.
+(Was: '%plugin% &cCombination failed!\nElytra missing, or is already combined.')
+Whether the item is missing or not, is no longer cared about.
+
+Changed: lang.yml entry 'separate-fail' has been changed to '%plugin% &cSeparation failed!\nElytra is not combined.'.
+(Was: '%plugin% &cSeparation failed!\nElytra missing, or is not combined.')
+Whether the item is missing or not, is no longer cared about.
+
+Fixed: New Update warning now shows the correct plugin name.
+
+Fixed: Default 'sound' in gui-separate.yml is now correctly 'BLOCK_ANVIL_USE'.
+
+Removed: 'interact' value on all gui entries.

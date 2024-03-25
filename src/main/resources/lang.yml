@@ -18,16 +18,13 @@ not-repaired: '%plugin% &cOne or more items are damaged.'
 
 combine-success: '%plugin% &aCombination success!'
 
-combine-fail: '%plugin% &cCombination failed!\nElytra missing, or is already combined.'
+combine-fail: '%plugin% &cCombination failed!\nElytra is already combined.'
 
 combine-disabled: '%plugin% &cCombination is disabled.'
 
-### NOTE: You cannot change %s. %s is used when formatting messages.
-# You may move %s around, but cannot rename it.
-
 # Text written in the item's lore to tell what item it's bound with.
-# %s - Name of the Chestplate. 
-combined-elytra-lore: '§7+ [§e%s§7]'
+# %chestplate% - Name of the Chestplate. 
+combined-elytra-lore: '§7+ [§e%chestplate%§7]'
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -37,6 +34,6 @@ combined-elytra-lore: '§7+ [§e%s§7]'
 
 separate-success: '%plugin% &aSeparation success!'
 
-separate-fail: '%plugin% &cSeparation failed!\nElytra missing, or is not combined.'
+separate-fail: '%plugin% &cSeparation failed!\nElytra is not combined.'
 
 separate-disabled: '%plugin% &cSeparation is disabled.'

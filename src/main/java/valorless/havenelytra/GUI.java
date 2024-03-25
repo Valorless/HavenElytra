@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
@@ -28,13 +27,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.common.collect.Multimap;
 
+import valorless.valorlessutils.utils.Utils;
 import valorless.valorlessutils.ValorlessUtils.Log;
 import valorless.valorlessutils.ValorlessUtils.Tags;
-import valorless.valorlessutils.ValorlessUtils.Utils;
 import valorless.valorlessutils.config.Config;
 import valorless.valorlessutils.json.JsonUtils;
+import valorless.valorlessutils.nbt.NBT;
+import valorless.valorlessutils.sound.SFX;
 
 enum Menu { main, combine, separate }
+enum GUIAction { NULL, CONFIRM, BACK, COMBINE, SEPARATE }
 public class GUI implements Listener {
 	public static JavaPlugin plugin;
 	private Inventory inv;
@@ -49,7 +51,6 @@ public class GUI implements Listener {
 		public String name = "";
 		public String item = "";
 		public List<String> lore = new ArrayList<String>();
-		public Boolean interactable = false;
 		public int customModelData;
 		public String tag;
 	}
@@ -58,9 +59,9 @@ public class GUI implements Listener {
 		this.player = player;
 		this.config = new Config(plugin, "gui-main.yml");
 		this.size = config.GetInt("gui-size");
-		inv = Bukkit.createInventory(player, config.GetInt("gui-size"), Lang.Parse(config.GetString("gui-name")));
+		inv = Bukkit.createInventory(player, config.GetInt("gui-size"), Lang.Parse(config.GetString("gui-name"), null));
 		UpdateGUI(Menu.main);
-		SFX.Play(config.GetString("sound"), 1f, 1f, player);
+		SFX.Play(config.GetString("sound"), config.GetFloat("volume").floatValue(), config.GetFloat("pitch").floatValue(), player);
         OpenInventory(player);
         Main.openGUIs.add(this);
     }
@@ -73,12 +74,9 @@ public class GUI implements Listener {
 			if(items != null) items.clear();
 			if(inv != null) inv.clear();
 			config = new Config(plugin, "gui-" + menu.toString() + ".yml");
-			//Rename(player, Lang.Parse(config.GetString("gui-name")));
     		InitializeLists();
-    		//while(inv != null) { inv = null; }
-    		inv = Bukkit.createInventory(player, config.GetInt("gui-size"), Lang.Parse(config.GetString("gui-name")));
+    		inv = Bukkit.createInventory(player, config.GetInt("gui-size"), Lang.Parse(config.GetString("gui-name"), null));
     		player.openInventory(inv);
-    		//inv = Bukkit.createInventory(player, config.GetInt("gui-size"), Lang.Parse(config.GetString("gui-name")));
         	filler = config.GetString("filler");
         	InitializeItems();
 		} catch(Exception e) {
@@ -94,7 +92,6 @@ public class GUI implements Listener {
     		item.name = config.GetString("gui." + i + ".name");
     		item.item = config.GetString("gui." + i + ".item");
     		item.lore = config.GetStringList("gui." + i + ".lore");
-    		item.interactable = config.GetBool("gui." + i + ".interact");
     		if(config.GetInt("gui." + i + ".custom-model-data") != null) {
     			item.customModelData = config.GetInt("gui." + i + ".custom-model-data");
     		}
@@ -110,10 +107,10 @@ public class GUI implements Listener {
 		int g = 0;
     	for(int i = 0; i < items.size(); i++) {
     		if(!Utils.IsStringNullOrEmpty(items.get(i).item)) {
-    			inv.setItem(i, CreateGuiItem(Material.getMaterial(items.get(i).item), items.get(i).name, items.get(i).interactable, items.get(i).tag, items.get(i).lore, items.get(i).customModelData));
+    			inv.setItem(i, CreateGuiItem(Material.getMaterial(items.get(i).item), items.get(i).name, items.get(i).tag, items.get(i).lore, items.get(i).customModelData));
     			g++;
     		} else {
-    			inv.setItem(i, CreateGuiItem(Material.getMaterial(filler.toUpperCase()), "§f", false, "", null, 80000));
+    			inv.setItem(i, CreateGuiItem(Material.getMaterial(filler.toUpperCase()), "§f", null, null, 80000));
     			
     		}
     	}
@@ -123,26 +120,28 @@ public class GUI implements Listener {
     	}
     }
 	
-	protected ItemStack CreateGuiItem(final Material material, final String name, boolean interact, final String tag, final List<String> lore, int customModelData) {
+	protected ItemStack CreateGuiItem(final Material material, final String name, final String tag, final List<String> lore, int customModelData) {
         ItemStack item = new ItemStack(material, 1);
         ItemMeta meta = item.getItemMeta();
         if(meta != null) {
-        	meta.setDisplayName(Lang.Parse(name));
+        	meta.setDisplayName(Lang.Parse(name, null));
         	if(lore != null) {
         		for(String entry : lore) {
-        			entry = Lang.Parse(entry);
+        			entry = Lang.Parse(entry, null);
         		}
         		meta.setLore(lore);
         	}
-        	
-        	Tags.Set(plugin, meta.getPersistentDataContainer(), "interact", interact ? 1 : 0, PersistentDataType.INTEGER);
-        	Tags.Set(plugin, meta.getPersistentDataContainer(), "tag", tag, PersistentDataType.STRING);
         	
         	meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         	if(customModelData != 0) {
         		meta.setCustomModelData(customModelData);
         	}
         	item.setItemMeta(meta);
+        	
+        	NBT.SetBool(item, "GUI", true);
+        	if(!Utils.IsStringNullOrEmpty(tag)) {
+        		NBT.SetString(item, "action", tag);
+        	}
         }
         return item;
     }
@@ -155,101 +154,64 @@ public class GUI implements Listener {
     public void onInventoryClick(final InventoryClickEvent e) {
     	//Log.Info(String.valueOf(e.getRawSlot()));
         if (!e.getInventory().equals(inv)) return;
+    	ItemStack clickedItem = e.getCurrentItem();
+        if (clickedItem == null || clickedItem.getType().isAir()) return;
         
-        if(menu == Menu.main) {
-        	ItemStack clickedItem = e.getCurrentItem();
-            if (clickedItem != null) {
-            	if(clickedItem.hasItemMeta()) {
-            		if(clickedItem.getItemMeta().getPersistentDataContainer().get(
-                	new NamespacedKey(plugin,  "interact"), PersistentDataType.INTEGER) != null) {
-            			if(clickedItem.getItemMeta().getPersistentDataContainer().get(
-            			new NamespacedKey(plugin, "interact"), PersistentDataType.INTEGER) == 0) {
-            				e.setCancelled(true);
-            			}
-            		}
-            	}
-            }/* else {
-            	if(player.getItemOnCursor() != null || !player.getItemOnCursor().getType().isAir()) {
-            		//Log.Error(plugin, String.valueOf(e.getRawSlot()));
-            		if(e.getRawSlot() < items.size() && e.getRawSlot() != -999) {
-            			if(Utils.IsStringNullOrEmpty(items.get(e.getRawSlot()).item)) {
-                    		//Log.Error(plugin, "pain");
-            				ItemStack i = player.getItemOnCursor();
-            				e.setCancelled(true);
-            				inv.setItem(e.getRawSlot(), null);
-            				player.setItemOnCursor(null);
-            				player.getInventory().addItem(i);
-            			}
-            		}
-            	}
-            }*/
-            if (clickedItem == null || clickedItem.getType().isAir()) return;
-            
-            Object tag = Tags.Get(plugin, clickedItem.getItemMeta().getPersistentDataContainer(), "tag", PersistentDataType.STRING);
-            if(tag == null) return;
-            if(!Utils.IsStringNullOrEmpty(tag.toString())) {
+        List<Placeholder> placeholders = new ArrayList<Placeholder>();
+        
+        if(NBT.Has(clickedItem, "GUI") && !NBT.Has(clickedItem, "action")) {
+           	e.setCancelled(true);
+           	return;
+        }
+        
+        GUIAction action = GUIAction.NULL;
+        try {
+        	action = GUIAction.valueOf(NBT.GetString(clickedItem, "action"));
+        }catch (Exception E) {
+        	return;
+        }
+        
+        
+        
+        if(menu == Menu.main) {        
+            if(action == GUIAction.NULL) return;
             	//Log.Info(plugin, tag);
-            	if(tag.toString().equalsIgnoreCase("COMBINE")){
+            	if(action == GUIAction.COMBINE){
             		if(player.hasPermission("havenelytra.combine")) {
             			if(Main.config.GetBool("combine")) { UpdateGUI(Menu.combine); return; }
             			else { 
-            				player.sendMessage(Lang.Get("combine-disabled"));
+                			player.sendMessage(Lang.Parse(Lang.Get("combine-disabled"),null));
             			}
             		}else {
-            			player.sendMessage(Lang.Get("no-permission"));
+            			player.sendMessage(Lang.Parse(Lang.Get("no-permission"),null));
             		}
             	}
-            	if(tag.toString().equalsIgnoreCase("SEPARATE")) {
+            	if(action == GUIAction.SEPARATE) {
             		if(player.hasPermission("havenelytra.separate")) {
             			if(Main.config.GetBool("separate")) { UpdateGUI(Menu.separate); return; }
             			else { 
-            			player.sendMessage(Lang.Get("separate-disabled"));
+                			player.sendMessage(Lang.Parse(Lang.Get("separate-disabled"),null));
             			}
             		}else {
-            			player.sendMessage(Lang.Get("no-permission"));
+            			player.sendMessage(Lang.Parse(Lang.Get("no-permission"),null));
             		}
             	}
-            }
+            
         }
         
         if(menu == Menu.combine) {
-        	ItemStack clickedItem = e.getCurrentItem();
         	if(e.getRawSlot() >= items.size()) { return; }
-            if (clickedItem != null) {
-            	if(clickedItem.hasItemMeta()) {
-            		if(clickedItem.getItemMeta().getPersistentDataContainer().get(
-                	new NamespacedKey(plugin, "interact"), PersistentDataType.INTEGER) != null) {
-            			if(clickedItem.getItemMeta().getPersistentDataContainer().get(
-            			new NamespacedKey(plugin, "interact"), PersistentDataType.INTEGER) == 0) {
-            				e.setCancelled(true);
-            			}
-            		}
-            	}
-            }/* else {
-            	if(player.getItemOnCursor() != null || !player.getItemOnCursor().getType().isAir()) {
-            		//Log.Error(plugin, String.valueOf(e.getRawSlot()));
-            		if(e.getRawSlot() < items.size() && e.getRawSlot() != -999) {
-            			if(Utils.IsStringNullOrEmpty(items.get(e.getRawSlot()).item)) {
-                    		//Log.Error(plugin, "pain");
-            				ItemStack i = player.getItemOnCursor();
-            				e.setCancelled(true);
-            				inv.setItem(e.getRawSlot(), null);
-            				player.setItemOnCursor(null);
-            				player.getInventory().addItem(i);
-            			}
-            		}
-            	}
-            }*/
-            if (clickedItem == null || clickedItem.getType().isAir()) return;
+        	
             
         	List<Integer> slots = new ArrayList<Integer>();
             if(e.getRawSlot() < items.size()) {
-            	if(items.get(e.getRawSlot()).tag.equalsIgnoreCase("BACK")) {
+            	if(action == GUIAction.BACK) {
                     ReturnItems();
             		UpdateGUI(Menu.main);
             	}
             	
-            	if(items.get(e.getRawSlot()).tag.equalsIgnoreCase("CONFIRM")) {
+            	if(action == GUIAction.CONFIRM) {
+            		e.setCancelled(true);
             		for (int i = 0; i < e.getInventory().getSize(); i++) {
             			if(items.get(i).tag.equalsIgnoreCase("PLAYER") || items.get(i).tag.equalsIgnoreCase("RESULT")) {
             	    		slots.add(i);
@@ -258,32 +220,37 @@ public class GUI implements Listener {
             	    }
             		ItemStack chestplate = e.getInventory().getItem(slots.get(0));
         			ItemStack elytra = e.getInventory().getItem(slots.get(1));
+        			if(elytra == null) return;
+        			if(Tags.Has(plugin, elytra.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER)) {
+        				player.sendMessage("Please convert this elytra with §e/havenelytra convert§r.");
+                		e.setCancelled(true);
+                		return;
+        			}
         			
             		if(ValidateChestplate(chestplate) && ValidateElytra(elytra)) {
             			
             			if(IDamage.IsItemDamaged(chestplate) || IDamage.IsItemDamaged(elytra)) {
-            				player.sendMessage(Lang.Get("not-repaired"));
+                			player.sendMessage(Lang.Parse(Lang.Get("not-repaired"),null));
             				e.setCancelled(true);
             				return;
             			}
             			
             			ItemStack tempItem = new ItemStack(Material.ELYTRA);
             			ItemMeta tempStorage = tempItem.getItemMeta();
-            			Tags.Set(plugin, tempStorage.getPersistentDataContainer(), "elytra-meta", JsonUtils.toJson(elytra.getItemMeta()), PersistentDataType.STRING);
-            			Tags.Set(plugin, tempStorage.getPersistentDataContainer(), "chestplate-meta", JsonUtils.toJson(chestplate.getItemMeta()), PersistentDataType.STRING);
+            			NBT.SetString(tempItem, "elytra-elytra-meta", JsonUtils.toJson(elytra.getItemMeta()));
+            			NBT.SetString(tempItem, "elytra-chestplate-meta", JsonUtils.toJson(chestplate.getItemMeta()));
             			        			            			
             			String chestplateName;
             			if(!Utils.IsStringNullOrEmpty(chestplate.getItemMeta().getDisplayName())) {
             				chestplateName = chestplate.getItemMeta().getDisplayName();
             			} else {
             				chestplateName = Main.translator.Translate(chestplate.getType().getTranslationKey());
-            				//chestplateName = TranslateChestplateName(FixName(chestplate.getType().name().toLowerCase()));
             			}
             			String elytraName = elytra.getItemMeta().getDisplayName();
         				List<String> lore = new ArrayList<String>();
             			if(chestplate.getItemMeta().getLore() != null) {
             				for(String str : chestplate.getItemMeta().getLore()) {
-            					lore.add(Lang.Parse(str));
+            					lore.add(Lang.Parse(str, null));
             				}
             			}
             			if(elytra.getItemMeta().getLore() != null) {
@@ -293,13 +260,13 @@ public class GUI implements Listener {
             				}
             			}
             			lore.add("§r");
-            			lore.add(Lang.Get("combined-elytra-lore", chestplateName));
+            			placeholders.add(new Placeholder("%chestplate%", chestplateName));
+            			lore.add(Lang.Parse(Lang.Get("combined-elytra-lore"), placeholders));
             			//lore.add("§7+ [" + chestplateName + "§7]");
             			ItemMeta chestMeta = chestplate.getItemMeta();
             			chestMeta.setDisplayName(elytraName);
             			chestMeta.setLore(lore);
             			
-            			//chestMeta.setAttributeModifiers(chestplate.getItemMeta().getAttributeModifiers());
             			Multimap<Attribute, AttributeModifier> attr = chestMeta.getAttributeModifiers(EquipmentSlot.CHEST);
             			while(attr == null) {
             				//Basically to wait an extra frame to ensure it's not null.
@@ -322,85 +289,61 @@ public class GUI implements Listener {
             				chestMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, GetModifier(chestplate, Attribute.GENERIC_KNOCKBACK_RESISTANCE));
             			}
             			
-            			
-            			//chestMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, GetModifier(chestplate, Attribute.GENERIC_ARMOR));
-            			//chestMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, GetModifier(chestplate, Attribute.GENERIC_ARMOR_TOUGHNESS));
-            			//chestMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE, GetModifier(chestplate, Attribute.GENERIC_KNOCKBACK_RESISTANCE));
-            			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "combined", 1, PersistentDataType.INTEGER);
-            			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "chestplate-type", chestplate.getType().toString(), PersistentDataType.STRING);
-            			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "chestplate-name", chestplateName, PersistentDataType.STRING);
             			chestMeta.setCustomModelData(null);
             			if(elytra.getItemMeta().hasCustomModelData()) {
             				chestMeta.setCustomModelData(elytra.getItemMeta().getCustomModelData());
             			}
-            			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "elytra-meta", 
-            					Tags.Get(plugin, tempStorage.getPersistentDataContainer(), "elytra-meta", PersistentDataType.STRING).toString()
-            					, PersistentDataType.STRING);
-            			Tags.Set(plugin, chestMeta.getPersistentDataContainer(), "chestplate-meta", 
-            					Tags.Get(plugin, tempStorage.getPersistentDataContainer(), "chestplate-meta", PersistentDataType.STRING).toString()
-            					, PersistentDataType.STRING);
             			
             			chestplate.setItemMeta(chestMeta);
+            			
+            			NBT.SetInt(chestplate, "elytra-combined", 1);
+            			NBT.SetString(chestplate, "elytra-chestplate-type", chestplate.getType().toString());
+            			NBT.SetString(chestplate, "elytra-chestplate-name", chestplateName);
+            			
+            			NBT.SetString(chestplate, "elytra-elytra-meta", NBT.GetString(tempItem, "elytra-elytra-meta"));
+            			NBT.SetString(chestplate, "elytra-chestplate-meta", NBT.GetString(tempItem, "elytra-chestplate-meta"));
+
             			chestplate.setType(Material.ELYTRA);
+            			
             			e.getInventory().clear(slots.get(0));
             			e.getInventory().clear(slots.get(1));
             			e.getInventory().setItem(slots.get(2), chestplate);
-            			player.sendMessage(Lang.Get("combine-success"));
-            			SFX.Play(config.GetString("sound"), 1f, 1f, player);
+            			player.sendMessage(Lang.Parse(Lang.Get("combine-success"),null));
+            			SFX.Play(config.GetString("sound"), config.GetFloat("volume").floatValue(), config.GetFloat("pitch").floatValue(), player);
             		}
             	}
             }
         }
         
-        if(menu == Menu.separate) {
-            ItemStack clickedItem = e.getCurrentItem();
-            if (clickedItem != null) {
-            	if(clickedItem.hasItemMeta()) {
-            		if(clickedItem.getItemMeta().getPersistentDataContainer().get(
-                	new NamespacedKey(plugin,  "interact"), PersistentDataType.INTEGER) != null) {
-            			if(clickedItem.getItemMeta().getPersistentDataContainer().get(
-            			new NamespacedKey(plugin, "interact"), PersistentDataType.INTEGER) == 0) {
-            				e.setCancelled(true);
-            			}
-            		}
-            	}
-            }/* else {
-            	if(player.getItemOnCursor() != null || !player.getItemOnCursor().getType().isAir()) {
-            		//Log.Error(plugin, String.valueOf(e.getRawSlot()));
-            		if(e.getRawSlot() < items.size() && e.getRawSlot() != -999) {
-            			if(Utils.IsStringNullOrEmpty(items.get(e.getRawSlot()).item)) {
-                    		//Log.Error(plugin, "pain");
-            				ItemStack i = player.getItemOnCursor();
-            				e.setCancelled(true);
-            				inv.setItem(e.getRawSlot(), null);
-            				player.setItemOnCursor(null);
-            				player.getInventory().addItem(i);
-            			}
-            		}
-            	}
-            }*/
-            if (clickedItem == null || clickedItem.getType().isAir()) return;
-            
+        if(menu == Menu.separate) {            
         	List<Integer> slots = new ArrayList<Integer>();
             if(e.getRawSlot() < items.size()) {
-            	if(items.get(e.getRawSlot()).tag.equalsIgnoreCase("BACK")) {
+            	if(action == GUIAction.BACK) {
                     ReturnItems();
             		UpdateGUI(Menu.main);
             	}
-            	if(items.get(e.getRawSlot()).tag.equalsIgnoreCase("CONFIRM")) {
+            	
+            	if(action == GUIAction.CONFIRM) {
+            		e.setCancelled(true);
             		for (int i = 0; i < e.getInventory().getSize(); i++) {
             			if(items.get(i).tag.equalsIgnoreCase("PLAYER") || items.get(i).tag.equalsIgnoreCase("RESULT")) {
             	    		slots.add(i);
             	    	}
             	    }
         			ItemStack elytra = e.getInventory().getItem(slots.get(0));
+        			if(elytra == null) return;
+        			if(Tags.Has(plugin, elytra.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER)) {
+        				player.sendMessage("Please convert this elytra with §e/havenelytra convert§r.");
+                		e.setCancelled(true);
+                		return;
+        			}
             		if(ValidateElytra(elytra)) {
-            			Material chestplateType = Material.getMaterial(Tags.Get(plugin, elytra.getItemMeta().getPersistentDataContainer(), "chestplate-type", PersistentDataType.STRING).toString());
+            			Material chestplateType = Material.getMaterial(NBT.GetString(elytra, "elytra-chestplate-type"));
             			ItemStack chestplate = new ItemStack(chestplateType);
             			ItemStack replacementElytra = new ItemStack(Material.ELYTRA);
             			Map <Enchantment, Integer> enchants = elytra.getItemMeta().getEnchants();
-            			replacementElytra.setItemMeta((ItemMeta)JsonUtils.fromJson(Tags.Get(plugin, elytra.getItemMeta().getPersistentDataContainer(), "elytra-meta", PersistentDataType.STRING).toString()));
-            			chestplate.setItemMeta((ItemMeta)JsonUtils.fromJson(Tags.Get(plugin, elytra.getItemMeta().getPersistentDataContainer(), "chestplate-meta", PersistentDataType.STRING).toString()));
+            			replacementElytra.setItemMeta((ItemMeta)JsonUtils.fromJson(NBT.GetString(elytra, "elytra-elytra-meta")));
+            			chestplate.setItemMeta((ItemMeta)JsonUtils.fromJson(NBT.GetString(elytra, "elytra-chestplate-meta")));
             			ItemMeta chestMeta = chestplate.getItemMeta();
             			for(Map.Entry<Enchantment, Integer> enchant : enchants.entrySet()) {
             				chestMeta.addEnchant(enchant.getKey(), enchant.getValue(), true);
@@ -409,14 +352,12 @@ public class GUI implements Listener {
             			e.getInventory().clear(slots.get(0));
             			e.getInventory().setItem(slots.get(1), replacementElytra);
             			e.getInventory().setItem(slots.get(2), chestplate);
-            			player.sendMessage(Lang.Get("separate-success"));
-            			SFX.Play(config.GetString("sound"), 1f, 1f, player);
+            			player.sendMessage(Lang.Parse(Lang.Get("separate-success"),null));
+            			SFX.Play(config.GetString("sound"), config.GetFloat("volume").floatValue(), config.GetFloat("pitch").floatValue(), player);
             		}
             	}
             }
         }
-        // Using slots click is a best option for your inventory click's
-        //player.sendMessage("You clicked at slot " + e.getRawSlot());
     }
     
     @EventHandler
@@ -499,22 +440,22 @@ public class GUI implements Listener {
     		return false;
     	}
     	if(chestplate.getType() == Material.LEATHER_CHESTPLATE && config.GetBool("leather") == false) {
-    		player.sendMessage(Lang.Get("material-disabled"));
+    		player.sendMessage(Lang.Parse(Lang.Get("material-disabled"),null));
     		return false;
     	}else if(chestplate.getType() == Material.IRON_CHESTPLATE && config.GetBool("iron") == false) {
-    		player.sendMessage(Lang.Get("material-disabled"));
+    		player.sendMessage(Lang.Parse(Lang.Get("material-disabled"),null));
     		return false;
     	}else if(chestplate.getType() == Material.GOLDEN_CHESTPLATE && config.GetBool("gold") == false) {
-    		player.sendMessage(Lang.Get("material-disabled"));
+    		player.sendMessage(Lang.Parse(Lang.Get("material-disabled"),null));
     		return false;
     	}else if(chestplate.getType() == Material.CHAINMAIL_CHESTPLATE && config.GetBool("chainmail") == false) {
-    		player.sendMessage(Lang.Get("material-disabled"));
+    		player.sendMessage(Lang.Parse(Lang.Get("material-disabled"),null));
     		return false;
     	}else if(chestplate.getType() == Material.DIAMOND_CHESTPLATE && config.GetBool("diamond") == false) {
-    		player.sendMessage(Lang.Get("material-disabled"));
+    		player.sendMessage(Lang.Parse(Lang.Get("material-disabled"),null));
     		return false;
     	}else if(chestplate.getType() == Material.NETHERITE_CHESTPLATE && config.GetBool("netherite") == false) {
-    		player.sendMessage(Lang.Get("material-disabled"));
+    		player.sendMessage(Lang.Parse(Lang.Get("material-disabled"),null));
     		return false;
     	}else {
     		return true;
@@ -525,39 +466,28 @@ public class GUI implements Listener {
     	if(elytra == null) return false;
     	if(menu == Menu.combine) {
     		if(elytra.getType() == Material.ELYTRA) { 
-    			if(Tags.Get(plugin, elytra.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER) != null) {
-    				if((Integer)Tags.Get(plugin, elytra.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER) == 0) {
-    					return true;
-    				} else {
-    					player.sendMessage(Lang.Get("combine-fail"));
-    					return false;
-    				}
-    			}
-    			else {
-    				return true;
+    			if(NBT.Has(elytra, "elytra-combined")) {
+            		player.sendMessage(Lang.Parse(Lang.Get("combine-fail"),null));
+    				return false;
+    			}else {
+        			return true;
     			}
     		}
     		else { 
-				player.sendMessage(Lang.Get("combine-fail"));
+    			player.sendMessage(Lang.Parse(Lang.Get("combine-fail"),null));
     			return false;
     		}
     	}else if(menu == Menu.separate) {
     		if(elytra.getType() == Material.ELYTRA) { 
-        		if(Tags.Get(plugin, elytra.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER) != null) {
-        			if((Integer)Tags.Get(plugin, elytra.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER) == 1) {
-        				return true;
-        			} else {
-        				player.sendMessage(Lang.Get("separate-fail"));
-        				return false;
-        			}
-        		}
-        		else {
-        			player.sendMessage(Lang.Get("separate-fail"));
+    			if(NBT.Has(elytra, "elytra-combined")) {
+    				return true;
+    			}else {
+        			player.sendMessage(Lang.Parse(Lang.Get("separate-fail"),null));
         			return false;
-        		}
+    			}
         	}
         	else { 
-    			player.sendMessage(Lang.Get("separate-fail"));
+    			player.sendMessage(Lang.Parse(Lang.Get("separate-fail"),null));
         		return false;
         	}
     	}else return false;

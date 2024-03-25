@@ -1,5 +1,6 @@
 package valorless.havenelytra;
 
+import valorless.havenelytra.hooks.PlaceholderAPIHook;
 import valorless.valorlessutils.ValorlessUtils.Log;
 import valorless.valorlessutils.config.Config;
 import valorless.valorlessutils.translate.Translator;
@@ -24,7 +25,8 @@ public final class Main extends JavaPlugin implements Listener {
 	public static Config combine;
 	public static Config separate;
 	Boolean uptodate = true;
-	String newupdate = null;
+	int newupdate = 9999999;
+	String newVersion = null;
 	public static Translator translator;
 	public static List<GUI> openGUIs = new ArrayList<GUI>();
     
@@ -39,22 +41,50 @@ public final class Main extends JavaPlugin implements Listener {
 		combine = new Config(this, "gui-combine.yml");
 		separate = new Config(this, "gui-separate.yml");
 		
-		Lang.messages = new Config(this, "messages.yml");
+		Lang.lang = new Config(this, "lang.yml");
 		
 		CommandListener.plugin = this;
 		
 		GUI.plugin = this;
 	}
 	
+	@SuppressWarnings("unused")
+	boolean ValorlessUtils() {
+		Log.Debug(plugin, "Checking ValorlessUtils");
+		
+		int requiresBuild = 219;
+		
+		String ver = Bukkit.getPluginManager().getPlugin("ValorlessUtils").getDescription().getVersion();
+		//Log.Debug(plugin, ver);
+		String[] split = ver.split("[.]");
+		int major = Integer.valueOf(split[0]);
+		int minor = Integer.valueOf(split[1]);
+		int hotfix = Integer.valueOf(split[2]);
+		int build = Integer.valueOf(split[3]);
+		
+		if(build < requiresBuild) {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+        		public void run() {
+        			Log.Error(plugin, String.format("HavenBags requires ValorlessUtils build %s or newer, found %s. (%s)", requiresBuild, build, ver));
+        			Log.Error(plugin, "https://www.spigotmc.org/resources/valorlessutils.109586/");
+        			Bukkit.getPluginManager().disablePlugin(plugin);
+        		}
+    		}, 10);
+			return false;
+		}
+		else return true;
+	}
+	
 	@Override
     public void onEnable() {
-        // All you have to do is adding the following two lines in your onEnable method.
-        // You can find the plugin ids of your plugins on the page https://bstats.org/what-is-my-plugin-id
-        int pluginId = 18792; // <-- Replace with the id of your plugin!
-        Metrics metrics = new Metrics(this, pluginId);
-        
-		CreateTemplates();
 		Log.Debug(plugin, "HavenElytra Debugging Enabled!");
+		
+		// Check if a correct version of ValorlessUtils is in use, otherwise don't run the rest of the code.
+		if(!ValorlessUtils()) return;
+				
+		PlaceholderAPIHook.Hook();
+				
+		CreateTemplates();
 		
 		//Config
 		config.AddValidationEntry("debug", false);
@@ -67,6 +97,8 @@ public final class Main extends JavaPlugin implements Listener {
 		
 		//Main GUI
 		main.AddValidationEntry("sound", "ENTITY_PLAYER_LEVELUP");
+		main.AddValidationEntry("volume", 1.0);
+		main.AddValidationEntry("pitch", 1.0);
 		main.AddValidationEntry("gui-name", "&a&lHaven Elytra");
 		main.AddValidationEntry("gui-size", 27);
 		main.AddValidationEntry("gui", "");
@@ -76,6 +108,8 @@ public final class Main extends JavaPlugin implements Listener {
 
 		//Combine
 		combine.AddValidationEntry("sound", "BLOCK_ANVIL_USE");
+		combine.AddValidationEntry("volume", 1.0);
+		combine.AddValidationEntry("pitch", 1.0);
 		combine.AddValidationEntry("gui-name", "&aCombination");
 		combine.AddValidationEntry("gui-size", 27);
 		combine.AddValidationEntry("gui", "");
@@ -91,6 +125,8 @@ public final class Main extends JavaPlugin implements Listener {
 
 		//Separate
 		separate.AddValidationEntry("sound", "BLOCK_ANVIL_USE");
+		separate.AddValidationEntry("volume", 1.0);
+		separate.AddValidationEntry("pitch", 1.0);
 		separate.AddValidationEntry("gui-name", "&cSeparation");
 		separate.AddValidationEntry("gui-size", 27);
 		separate.AddValidationEntry("gui", "");
@@ -99,21 +135,20 @@ public final class Main extends JavaPlugin implements Listener {
 		separate.Validate();
 		
 		//Lang
-		Lang.messages.AddValidationEntry("no-permission", "%plugin% &cSorry, you do not have permission to do this.");
-		Lang.messages.AddValidationEntry("combine-success", "%plugin% &aCombination success!");
-		Lang.messages.AddValidationEntry("combine-fail", "%plugin% &cCombination failed!\nElytra missing, or is already combined.");
-		Lang.messages.AddValidationEntry("combine-disabled", "%plugin% &cCombination is disabled.");
-		Lang.messages.AddValidationEntry("combined-elytra-lore", "&7+ [%s&7]");
-		Lang.messages.AddValidationEntry("separate-success", "%plugin% &aSeparation success!");
-		Lang.messages.AddValidationEntry("separate-fail", "%plugin% &cCombination failed!\nElytra missing, or is not combined.");
-		Lang.messages.AddValidationEntry("separate-disabled", "%plugin% &cSeparation is disabled.");
-		Lang.messages.AddValidationEntry("material-disabled", "%plugin% &cThis type of chestplate cannot be used.");
-		Lang.messages.AddValidationEntry("not-repaired", "%plugin% &cOne or more items are damaged.");
-		Log.Debug(plugin, "Validating messages.yml");
-		Lang.messages.Validate();
+		Lang.lang.AddValidationEntry("no-permission", "%plugin% &cSorry, you do not have permission to do this.");
+		Lang.lang.AddValidationEntry("combine-success", "%plugin% &aCombination success!");
+		Lang.lang.AddValidationEntry("combine-fail", "%plugin% &cCombination failed!\nElytra is already combined.");
+		Lang.lang.AddValidationEntry("combine-disabled", "%plugin% &cCombination is disabled.");
+		Lang.lang.AddValidationEntry("combined-elytra-lore", "&7+ [%s&7]");
+		Lang.lang.AddValidationEntry("separate-success", "%plugin% &aSeparation success!");
+		Lang.lang.AddValidationEntry("separate-fail", "%plugin% &cCombination failed!\nElytra is not combined.");
+		Lang.lang.AddValidationEntry("separate-disabled", "%plugin% &cSeparation is disabled.");
+		Lang.lang.AddValidationEntry("material-disabled", "%plugin% &cThis type of chestplate cannot be used.");
+		Lang.lang.AddValidationEntry("not-repaired", "%plugin% &cOne or more items are damaged.");
+		Log.Debug(plugin, "Validating lang.yml");
+		Lang.lang.Validate();
 
 		CommandListener.onEnable();
-		
 		
 		getServer().getPluginManager().registerEvents(new CommandListener(), this);
 		
@@ -125,17 +160,31 @@ public final class Main extends JavaPlugin implements Listener {
 			Log.Info(plugin, "Checking for updates..");
 			new UpdateChecker(this, 109583).getVersion(version -> {
 
-				newupdate = version;
+				newVersion = version;
+				String update = version.replace(".", "");
+				newupdate = Integer.parseInt(update);
+				String current = getDescription().getVersion().replace(".", "");;
+				int v = Integer.parseInt(current);
+				
 
-				if (!getDescription().getVersion().equals(version)) {
-					Log.Warning(plugin, String.format("An update has been found! (v%s, you are on v%s) \n", version, getDescription().getVersion()) + 
+				//if (!getDescription().getVersion().equals(version)) {
+				if (v < newupdate) {
+						Log.Warning(plugin, String.format("An update has been found! (v%s, you are on v%s) \n", version, getDescription().getVersion()) + 
 							"This could be bug fixes or additional features.\n" + 
-							"Please update HavenBags at https://www.spigotmc.org/resources/109583/");
+							"Please update HavenElytra at https://www.spigotmc.org/resources/109583/");
 					
 					uptodate = false;
+				}else {
+					Log.Info(plugin, "Up to date.");
 				}
 			});
 		}
+		
+		// All you have to do is adding the following two lines in your onEnable method.
+        // You can find the plugin ids of your plugins on the page https://bstats.org/what-is-my-plugin-id
+        int pluginId = 18792; // <-- Replace with the id of your plugin!
+		@SuppressWarnings("unused")
+		Metrics metrics = new Metrics(this, pluginId);
 		
     }
     

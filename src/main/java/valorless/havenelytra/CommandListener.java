@@ -1,14 +1,21 @@
 package valorless.havenelytra;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import valorless.valorlessutils.ValorlessUtils.*;
+import valorless.valorlessutils.nbt.NBT;
 import valorless.valorlessutils.translate.Translator;
 
 public class CommandListener implements Listener {
@@ -54,13 +61,47 @@ public class CommandListener implements Listener {
 					Main.combine.Reload();
 					Main.separate.Reload();
 					Main.main.Reload();
-					Lang.messages.Reload();
+					Lang.lang.Reload();
 					Main.translator = new Translator(Main.config.GetString("language"));
 					sender.sendMessage(Name +" §aReloaded.");
 					if(!console) { Log.Info(plugin, Name + " §aReloaded!"); }
 				}
+				
+				if(args[1].equalsIgnoreCase("convert")) {
+					Player player = (Player)sender;
+					ItemStack item = player.getInventory().getItemInMainHand();
+					if(item != null) {
+						if(item.getType() == Material.ELYTRA && item.hasItemMeta()) {
+		        			if(Tags.Has(plugin, item.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER)) {
+								Log.Debug(plugin, "Converting Elytra.");
+								ConvertData(item, "combined");
+								ConvertData(item, "chestplate-type");
+								ConvertData(item, "chestplate-name");
+								ConvertData(item, "elytra-meta");
+								ConvertData(item, "chestplate-meta");
+								
+							}
+						}
+					}
+					
+				}
 			}
 		}
+	}
+	
+	void ConvertData(ItemStack item, String key) {
+		Log.Debug(plugin, "Key: " + key);
+		Log.Debug(plugin, new NamespacedKey(plugin, key).toString());
+		if(key.equalsIgnoreCase("combined")) {
+			NBT.SetBool(item, "elytra-" + key, true);
+		}else {
+			NBT.SetString(item, "elytra-" + key, 
+					(String)Tags.Get(plugin, item.getItemMeta().getPersistentDataContainer(), key, PersistentDataType.STRING)
+					);
+		}
+		ItemMeta meta = item.getItemMeta();
+		meta.getPersistentDataContainer().remove(new NamespacedKey(plugin, key));
+		item.setItemMeta(meta);
 	}
 
 }

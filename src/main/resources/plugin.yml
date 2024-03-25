@@ -3,18 +3,13 @@ main: valorless.havenelytra.Main
 version: version-number
 author: Valorless
 depend: [ValorlessUtils]
+softdepend: [PlaceholderAPI]
 api-version: 1.18
 commands:
   havenelytra:
     description: Main command.
     usage:
     aliases: he
-  havenelytra reload:
-    description: Reloads the configuration file.
-    usage: /havenelytra reload
-    permission: havenelytra.reload
-    permission-message: You don't have havenelytra.reload.
-    aliases: he reload
 permissions:
   havenelytra.*:
     description: Gives access to all HavenElytra commands.

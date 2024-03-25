@@ -5,7 +5,9 @@
 ############################################################
 
 # Sound played when items combine.
-sound: 'ENTITY_PLAYER_LEVELUP'
+sound: 'BLOCK_ANVIL_USE'
+volume: 1.0
+pitch: 1.0
 # Sounds @ https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
 
 # Name of the container.
@@ -30,7 +32,6 @@ gui:
     item: ''
     lore:
       - ''
-    interact: false
     tag: ''
     
 # ## EXAMPLE ##
@@ -40,6 +41,5 @@ gui:
 #     item: LIME_STAINED_GLASS_PANE
 #     lore1: ''
 #     lore2: ''
-#     interact: false
 #     tag: CONFIRM
 #     custom-model-data: 0
