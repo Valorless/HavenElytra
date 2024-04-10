@@ -1,6 +1,7 @@
 package valorless.havenelytra;
 
 import valorless.havenelytra.hooks.PlaceholderAPIHook;
+import valorless.havenelytra.hooks.VaultHook;
 import valorless.valorlessutils.ValorlessUtils.Log;
 import valorless.valorlessutils.config.Config;
 import valorless.valorlessutils.translate.Translator;
@@ -81,7 +82,8 @@ public final class Main extends JavaPlugin implements Listener {
 		
 		// Check if a correct version of ValorlessUtils is in use, otherwise don't run the rest of the code.
 		if(!ValorlessUtils()) return;
-				
+
+		VaultHook.Hook();
 		PlaceholderAPIHook.Hook();
 				
 		CreateTemplates();
@@ -91,7 +93,9 @@ public final class Main extends JavaPlugin implements Listener {
 		config.AddValidationEntry("check-updates", true);
 		config.AddValidationEntry("language", "en_us");
 		config.AddValidationEntry("combine", true);
+		config.AddValidationEntry("combine-cost", 0);
 		config.AddValidationEntry("separate", true);
+		config.AddValidationEntry("separate-cost", 0);
 		Log.Debug(plugin, "Validating config.yml");
 		config.Validate();
 		
@@ -145,6 +149,8 @@ public final class Main extends JavaPlugin implements Listener {
 		Lang.lang.AddValidationEntry("separate-disabled", "%plugin% &cSeparation is disabled.");
 		Lang.lang.AddValidationEntry("material-disabled", "%plugin% &cThis type of chestplate cannot be used.");
 		Lang.lang.AddValidationEntry("not-repaired", "%plugin% &cOne or more items are damaged.");
+		Lang.lang.AddValidationEntry("cannot-afford", "%plugin% &cYou do not have enough money.");
+		Lang.lang.AddValidationEntry("can-afford", "%plugin% &a$%cost% has been taken from your balace.");
 		Log.Debug(plugin, "Validating lang.yml");
 		Lang.lang.Validate();
 

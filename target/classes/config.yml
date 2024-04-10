@@ -30,5 +30,13 @@ language: 'en_us'
 # Whether chestplates can be combined with elytras.
 combine: true
 
+# Requires Vault.
+# Ignored if 0.
+combine-cost: 0
+
 # Whether elytras can be separate back to chestplate and elytra.
 separate: true
+
+# Requires Vault.
+# Ignored if 0.
+separate-cost: 0

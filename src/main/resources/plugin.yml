@@ -2,9 +2,11 @@ name: HavenElytra
 main: valorless.havenelytra.Main
 version: version-number
 author: Valorless
-depend: [ValorlessUtils]
-softdepend: [PlaceholderAPI]
 api-version: 1.18
+website: https://www.spigotmc.org/resources/109583/
+description: Combined Chestplates and Elytras.
+depend: [ValorlessUtils]
+softdepend: [PlaceholderAPI, Vault]
 commands:
   havenelytra:
     description: Main command.

@@ -28,6 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.google.common.collect.Multimap;
 
 import valorless.valorlessutils.utils.Utils;
+import valorless.havenelytra.hooks.VaultHook;
 import valorless.valorlessutils.ValorlessUtils.Log;
 import valorless.valorlessutils.ValorlessUtils.Tags;
 import valorless.valorlessutils.config.Config;
@@ -235,6 +236,11 @@ public class GUI implements Listener {
             				return;
             			}
             			
+            			if(!Buy(Menu.combine)) {
+            				e.setCancelled(true);
+            				return;
+            			}
+            			
             			ItemStack tempItem = new ItemStack(Material.ELYTRA);
             			ItemMeta tempStorage = tempItem.getItemMeta();
             			NBT.SetString(tempItem, "elytra-elytra-meta", JsonUtils.toJson(elytra.getItemMeta()));
@@ -337,6 +343,18 @@ public class GUI implements Listener {
                 		e.setCancelled(true);
                 		return;
         			}
+        			
+        			/*if(IDamage.IsItemDamaged(elytra)) {
+            			player.sendMessage(Lang.Parse(Lang.Get("not-repaired"),null));
+        				e.setCancelled(true);
+        				return;
+        			}*/
+        			
+        			if(!Buy(Menu.separate)) {
+        				e.setCancelled(true);
+        				return;
+        			}
+        			
             		if(ValidateElytra(elytra)) {
             			Material chestplateType = Material.getMaterial(NBT.GetString(elytra, "elytra-chestplate-type"));
             			ItemStack chestplate = new ItemStack(chestplateType);
@@ -344,6 +362,7 @@ public class GUI implements Listener {
             			Map <Enchantment, Integer> enchants = elytra.getItemMeta().getEnchants();
             			replacementElytra.setItemMeta((ItemMeta)JsonUtils.fromJson(NBT.GetString(elytra, "elytra-elytra-meta")));
             			chestplate.setItemMeta((ItemMeta)JsonUtils.fromJson(NBT.GetString(elytra, "elytra-chestplate-meta")));
+            			replacementElytra.setDurability(elytra.getDurability());
             			ItemMeta chestMeta = chestplate.getItemMeta();
             			for(Map.Entry<Enchantment, Integer> enchant : enchants.entrySet()) {
             				chestMeta.addEnchant(enchant.getKey(), enchant.getValue(), true);
@@ -520,5 +539,25 @@ public class GUI implements Listener {
     	return string;
     }
     
+    public boolean Buy(Menu menu) {
+        double balance = VaultHook.getEconomy().getBalance(player);
+        Double cost = Main.config.GetFloat(menu.name() + "-cost");
+        if(cost == 0 || cost == 0.0) return true; //Skip
+        
+        if (balance >= cost) {
+        	try {
+        		VaultHook.getEconomy().withdrawPlayer(player, cost);
+        		player.sendMessage(Lang.Parse(Lang.Get("can-afford").replace("%cost%", cost.toString()),null));
+            	return true;
+        	} catch (Exception e) {
+        		player.sendMessage("§cSomething went wrong..");
+        		Log.Error(plugin, "Something went wrong while attempting to use Vault.");
+        		return false;
+        	}
+        }else {
+			player.sendMessage(Lang.Parse(Lang.Get("cannot-afford"),null));
+        	return false;
+        }
+    }
     
 }
