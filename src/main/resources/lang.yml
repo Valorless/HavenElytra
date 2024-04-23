@@ -12,7 +12,7 @@ not-repaired: '%plugin% &cOne or more items are damaged.'
 
 cannot-afford: '%plugin% &cYou do not have enough money.'
 
-can-afford: '%plugin% &a$%cost% has been taken from your balace.'
+can-afford: '%plugin% &a$%cost% has been taken from your balance.'
 
 ############################################################
 # +------------------------------------------------------+ #

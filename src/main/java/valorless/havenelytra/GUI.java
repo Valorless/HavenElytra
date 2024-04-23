@@ -309,6 +309,8 @@ public class GUI implements Listener {
             			NBT.SetString(chestplate, "elytra-elytra-meta", NBT.GetString(tempItem, "elytra-elytra-meta"));
             			NBT.SetString(chestplate, "elytra-chestplate-meta", NBT.GetString(tempItem, "elytra-chestplate-meta"));
 
+            			//FixEnchants(elytra, chestplate);
+            			
             			chestplate.setType(Material.ELYTRA);
             			
             			e.getInventory().clear(slots.get(0));
@@ -540,9 +542,16 @@ public class GUI implements Listener {
     }
     
     public boolean Buy(Menu menu) {
-        double balance = VaultHook.getEconomy().getBalance(player);
         Double cost = Main.config.GetFloat(menu.name() + "-cost");
         if(cost == 0 || cost == 0.0) return true; //Skip
+        
+        if(VaultHook.getEconomy() == null) {
+    		Log.Error(plugin, "Something went wrong while attempting to use Vault.");
+        	Log.Error(plugin, "is it up to date?");
+        	return true;
+        }
+        
+        double balance = VaultHook.getEconomy().getBalance(player);
         
         if (balance >= cost) {
         	try {
@@ -558,6 +567,17 @@ public class GUI implements Listener {
 			player.sendMessage(Lang.Parse(Lang.Get("cannot-afford"),null));
         	return false;
         }
+    }
+    
+    public void FixEnchants(ItemStack elytra, ItemStack chestplate) {
+    	ItemMeta chestMeta = chestplate.getItemMeta();
+    	if(elytra.getItemMeta().getEnchantLevel(Enchantment.DURABILITY) > chestMeta.getEnchantLevel(Enchantment.DURABILITY)) {
+			chestMeta.addEnchant(Enchantment.DURABILITY, elytra.getItemMeta().getEnchantLevel(Enchantment.DURABILITY), true);
+		}
+		if(elytra.getItemMeta().getEnchantLevel(Enchantment.MENDING) > chestMeta.getEnchantLevel(Enchantment.MENDING)) {
+			chestMeta.addEnchant(Enchantment.MENDING, elytra.getItemMeta().getEnchantLevel(Enchantment.MENDING), true);
+		}
+		chestplate.setItemMeta(chestMeta);
     }
     
 }

@@ -150,7 +150,7 @@ public final class Main extends JavaPlugin implements Listener {
 		Lang.lang.AddValidationEntry("material-disabled", "%plugin% &cThis type of chestplate cannot be used.");
 		Lang.lang.AddValidationEntry("not-repaired", "%plugin% &cOne or more items are damaged.");
 		Lang.lang.AddValidationEntry("cannot-afford", "%plugin% &cYou do not have enough money.");
-		Lang.lang.AddValidationEntry("can-afford", "%plugin% &a$%cost% has been taken from your balace.");
+		Lang.lang.AddValidationEntry("can-afford", "%plugin% &a$%cost% has been taken from your balance.");
 		Log.Debug(plugin, "Validating lang.yml");
 		Lang.lang.Validate();
 
