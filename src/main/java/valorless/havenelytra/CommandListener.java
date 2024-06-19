@@ -3,12 +3,10 @@ package valorless.havenelytra;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -18,14 +16,14 @@ import valorless.valorlessutils.ValorlessUtils.*;
 import valorless.valorlessutils.nbt.NBT;
 import valorless.valorlessutils.translate.Translator;
 
-public class CommandListener implements Listener {
+public class CommandListener implements CommandExecutor {
 	public static JavaPlugin plugin;
 	String Name = "§7[§aHaven§bElytra§7]§r";
 	
 	public static void onEnable() {
 	}
 	
-	@EventHandler
+	/*@EventHandler
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		String[] args = event.getMessage().split("\\s+");
 		CommandSender sender = event.getPlayer();
@@ -39,13 +37,18 @@ public class CommandListener implements Listener {
 		args[0] = "/" + args[0];
 		ProcessCommand(args, console, true);
 		
-	}
+	}*/
 	
-	public void ProcessCommand(String[] args, CommandSender sender, Boolean console) {
-		//for(int i = 0; i < args.length; i++) { Log.Severe(args[i]); }
-		if(args[0].equalsIgnoreCase("/havenelytra") || args[0].equalsIgnoreCase("/he")) {
+	@Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    	Log.Debug(Main.plugin, "Sender: " + sender.getName());
+    	Log.Debug(Main.plugin, "Command: " + command.toString());
+    	Log.Debug(Main.plugin, "Label: " + label);
+    	for(String a : args) {
+    		Log.Debug(Main.plugin, "Argument: " + a);
+    	}
 			
-			if(args.length == 1) {
+			if(args.length == 0) {
 				//sender.sendMessage(Name + " SakuraElytra by Valorless.");
 				//ItemGUI gui = new ItemGUI();
 				GUI gui = new GUI(Bukkit.getPlayer(sender.getName()));
@@ -53,10 +56,11 @@ public class CommandListener implements Listener {
 				//gui.player = Bukkit.getPlayer(sender.getName());
 	        	//SFX.Play(ItemGUI.config.GetString("sound"), 1f, 1f, Bukkit.getPlayer(sender.getName()));
 				//gui.OpenInventory(Bukkit.getPlayer(sender.getName()));
+				return true;
 			}
 			else 
-			if (args.length >= 2){
-				if(args[1].equalsIgnoreCase("reload") && sender.hasPermission("havenelytra.reload")) {
+			if (args.length >= 1){
+				if(args[0].equalsIgnoreCase("reload") && sender.hasPermission("havenelytra.reload")) {
 					Main.config.Reload();
 					Main.combine.Reload();
 					Main.separate.Reload();
@@ -64,30 +68,32 @@ public class CommandListener implements Listener {
 					Lang.lang.Reload();
 					Main.translator = new Translator(Main.config.GetString("language"));
 					sender.sendMessage(Name +" §aReloaded.");
-					if(!console) { Log.Info(plugin, Name + " §aReloaded!"); }
-				}
-				
-				if(args[1].equalsIgnoreCase("convert")) {
-					Player player = (Player)sender;
-					ItemStack item = player.getInventory().getItemInMainHand();
-					if(item != null) {
-						if(item.getType() == Material.ELYTRA && item.hasItemMeta()) {
-		        			if(Tags.Has(plugin, item.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER)) {
-								Log.Debug(plugin, "Converting Elytra.");
-								ConvertData(item, "combined");
-								ConvertData(item, "chestplate-type");
-								ConvertData(item, "chestplate-name");
-								ConvertData(item, "elytra-meta");
-								ConvertData(item, "chestplate-meta");
-								
-							}
-						}
-					}
-					
+					Log.Info(plugin, Name + " §aReloaded!"); 
+					return true;
 				}
 			}
+				
+			if(args[0].equalsIgnoreCase("convert")) {
+				Player player = (Player)sender;
+				ItemStack item = player.getInventory().getItemInMainHand();
+				if(item != null) {
+					if(item.getType() == Material.ELYTRA && item.hasItemMeta()) {
+		        		if(Tags.Has(plugin, item.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER)) {
+							Log.Debug(plugin, "Converting Elytra.");
+							ConvertData(item, "combined");
+							ConvertData(item, "chestplate-type");
+							ConvertData(item, "chestplate-name");
+							ConvertData(item, "elytra-meta");
+							ConvertData(item, "chestplate-meta");
+							return true;
+						}
+					}
+				}	
+			
 		}
+		return false;
 	}
+	
 	
 	void ConvertData(ItemStack item, String key) {
 		Log.Debug(plugin, "Key: " + key);

@@ -96,6 +96,18 @@ public final class Main extends JavaPlugin implements Listener {
 		config.AddValidationEntry("combine-cost", 0);
 		config.AddValidationEntry("separate", true);
 		config.AddValidationEntry("separate-cost", 0);
+		config.AddValidationEntry("custommodeldata.enabled", false);
+		config.AddValidationEntry("custommodeldata.combined", 12070);
+		config.AddValidationEntry("custommodeldata.per-material.enabled", false);
+		config.AddValidationEntry("custommodeldata.per-material.leather", 12071);
+		config.AddValidationEntry("custommodeldata.per-material.iron", 12072);
+		config.AddValidationEntry("custommodeldata.per-material.gold", 12073);
+		config.AddValidationEntry("custommodeldata.per-material.chainmail", 12074);
+		config.AddValidationEntry("custommodeldata.per-material.diamond", 12075);
+		config.AddValidationEntry("custommodeldata.per-material.netherite", 12076);
+		config.AddValidationEntry("item-damage.enabled", true);
+		config.AddValidationEntry("item-damage.chestplate-damage", true);
+		config.AddValidationEntry("item-damage.elytra-damage", false);
 		Log.Debug(plugin, "Validating config.yml");
 		config.Validate();
 		
@@ -155,9 +167,7 @@ public final class Main extends JavaPlugin implements Listener {
 		Lang.lang.Validate();
 
 		CommandListener.onEnable();
-		
-		getServer().getPluginManager().registerEvents(new CommandListener(), this);
-		
+				
 		RegisterCommands();
 		
 		translator = new Translator(config.GetString("language"));
@@ -206,7 +216,7 @@ public final class Main extends JavaPlugin implements Listener {
     public void RegisterCommands() {
     	for (int i = 0; i < commands.length; i++) {
     		Log.Debug(plugin, "Registering Command: " + commands[i]);
-    		getCommand(commands[i]).setExecutor(this);
+    		getCommand(commands[i]).setExecutor(new CommandListener());
     	}
     }
 

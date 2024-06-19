@@ -40,3 +40,26 @@ separate: true
 # Requires Vault.
 # Ignored if 0.
 separate-cost: 0
+
+# Custom Model Data of the combined elytra.
+# If diabled, the combined elytra will inherit the CMD of the original elytra.
+custommodeldata:
+ enabled: false
+ combined: 12070
+ # Should each material type have their own?
+ per-material:
+  enabled: false
+  leather: 12071
+  iron: 12072
+  gold: 12073
+  chainmail: 12074
+  diamond: 12075
+  netherite: 12076
+
+# Should the items take damage when separated?
+# Otherwise they get fully repaired.
+item-damage:
+ enabled: true
+ damage-chestplate: true
+ damage-elytra: false
+ 

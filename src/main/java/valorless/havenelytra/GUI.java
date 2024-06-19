@@ -151,7 +151,8 @@ public class GUI implements Listener {
         ent.openInventory(inv);
     }
     
-    @EventHandler
+    @SuppressWarnings("deprecation")
+	@EventHandler
     public void onInventoryClick(final InventoryClickEvent e) {
     	//Log.Info(String.valueOf(e.getRawSlot()));
         if (!e.getInventory().equals(inv)) return;
@@ -300,6 +301,8 @@ public class GUI implements Listener {
             				chestMeta.setCustomModelData(elytra.getItemMeta().getCustomModelData());
             			}
             			
+            			SetCustomModelData(elytra, chestplate.getType(), chestMeta);
+            			
             			chestplate.setItemMeta(chestMeta);
             			
             			NBT.SetInt(chestplate, "elytra-combined", 1);
@@ -364,7 +367,15 @@ public class GUI implements Listener {
             			Map <Enchantment, Integer> enchants = elytra.getItemMeta().getEnchants();
             			replacementElytra.setItemMeta((ItemMeta)JsonUtils.fromJson(NBT.GetString(elytra, "elytra-elytra-meta")));
             			chestplate.setItemMeta((ItemMeta)JsonUtils.fromJson(NBT.GetString(elytra, "elytra-chestplate-meta")));
-            			replacementElytra.setDurability(elytra.getDurability());
+            			if(Main.config.GetBool("item-damage.enabled")) {
+        					int damage = replacementElytra.getDurability() - elytra.getDurability();
+            				if(Main.config.GetBool("item-damage.damage-chestplate")) {
+            					chestplate.setDurability((short) (chestplate.getDurability() - damage));
+            				}
+            				if(Main.config.GetBool("item-damage.damage-elytra")) {
+            					replacementElytra.setDurability(elytra.getDurability());
+            				}
+            			}
             			ItemMeta chestMeta = chestplate.getItemMeta();
             			for(Map.Entry<Enchantment, Integer> enchant : enchants.entrySet()) {
             				chestMeta.addEnchant(enchant.getKey(), enchant.getValue(), true);
@@ -578,6 +589,38 @@ public class GUI implements Listener {
 			chestMeta.addEnchant(Enchantment.MENDING, elytra.getItemMeta().getEnchantLevel(Enchantment.MENDING), true);
 		}
 		chestplate.setItemMeta(chestMeta);
+    }
+    
+    void SetCustomModelData(ItemStack elytra, Material type, ItemMeta chestMeta) {
+    	if(!Main.config.GetBool("custommodeldata.enabled")) return;
+    	
+    	if(!Main.config.GetBool("custommodeldata.per-material.enabled")) {
+    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.combined"));
+    	} else {
+    		switch(type) {
+    			case LEATHER_CHESTPLATE:
+    	    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.per-material.leather"));
+    				break;
+    			case IRON_CHESTPLATE:
+    	    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.per-material.iron"));
+    				break;
+    			case GOLDEN_CHESTPLATE:
+    	    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.per-material.gold"));
+    				break;
+    			case CHAINMAIL_CHESTPLATE:
+    	    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.per-material.chainmail"));
+    				break;
+    			case DIAMOND_CHESTPLATE:
+    	    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.per-material.diamond"));
+    				break;
+    			case NETHERITE_CHESTPLATE:
+    	    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.per-material.netherite"));
+    				break;
+    				
+    		}
+    	}
+    	
+    	
     }
     
 }
