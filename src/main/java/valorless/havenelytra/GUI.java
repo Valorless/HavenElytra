@@ -81,6 +81,7 @@ public class GUI implements Listener {
         	filler = config.GetString("filler");
         	InitializeItems();
 		} catch(Exception e) {
+			e.printStackTrace();
 			Log.Error(plugin, e.getMessage());
 		}
 		
@@ -222,6 +223,14 @@ public class GUI implements Listener {
             	    }
             		ItemStack chestplate = e.getInventory().getItem(slots.get(0));
         			ItemStack elytra = e.getInventory().getItem(slots.get(1));
+        			ItemStack result = e.getInventory().getItem(slots.get(2));
+
+        			if(result != null) {
+        				if(result.getType() != Material.AIR) {
+        					e.setCancelled(true);
+        					return;
+        				}
+        			}
         			if(elytra == null) return;
         			if(Tags.Has(plugin, elytra.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER)) {
         				player.sendMessage("Please convert this elytra with §e/havenelytra convert§r.");
@@ -342,6 +351,21 @@ public class GUI implements Listener {
             	    	}
             	    }
         			ItemStack elytra = e.getInventory().getItem(slots.get(0));
+        			ItemStack resultelytra = e.getInventory().getItem(slots.get(1));
+        			ItemStack resultchest = e.getInventory().getItem(slots.get(2));
+
+        			if(resultelytra != null) {
+        				if(resultelytra.getType() != Material.AIR) {
+        					e.setCancelled(true);
+        					return;
+        				}
+        			}
+        			if(resultchest != null) {
+        				if(resultchest.getType() != Material.AIR) {
+        					e.setCancelled(true);
+        					return;
+        				}
+        			}
         			if(elytra == null) return;
         			if(Tags.Has(plugin, elytra.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER)) {
         				player.sendMessage("Please convert this elytra with §e/havenelytra convert§r.");

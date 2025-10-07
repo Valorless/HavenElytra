@@ -48,29 +48,26 @@ public class CommandListener implements CommandExecutor {
     		Log.Debug(Main.plugin, "Argument: " + a);
     	}
 			
-			if(args.length == 0) {
-				//sender.sendMessage(Name + " SakuraElytra by Valorless.");
-				//ItemGUI gui = new ItemGUI();
-				GUI gui = new GUI(Bukkit.getPlayer(sender.getName()));
-				Bukkit.getServer().getPluginManager().registerEvents(gui, plugin);
-				//gui.player = Bukkit.getPlayer(sender.getName());
-	        	//SFX.Play(ItemGUI.config.GetString("sound"), 1f, 1f, Bukkit.getPlayer(sender.getName()));
-				//gui.OpenInventory(Bukkit.getPlayer(sender.getName()));
+		if(args.length == 0) {
+			//ItemGUI gui = new ItemGUI();
+			GUI gui = new GUI(Bukkit.getPlayer(sender.getName()));
+			Bukkit.getServer().getPluginManager().registerEvents(gui, plugin);
+			//gui.player = Bukkit.getPlayer(sender.getName());
+	    	//SFX.Play(ItemGUI.config.GetString("sound"), 1f, 1f, Bukkit.getPlayer(sender.getName()));
+			//gui.OpenInventory(Bukkit.getPlayer(sender.getName()));
+			return true;
+		}
+		else if (args.length >= 1){
+			if(args[0].equalsIgnoreCase("reload") && sender.hasPermission("havenelytra.reload")) {
+				Main.config.Reload();
+				Main.combine.Reload();
+				Main.separate.Reload();
+				Main.main.Reload();
+				Lang.lang.Reload();
+				Main.translator = new Translator(Main.config.GetString("language"));
+				sender.sendMessage(Name +" §aReloaded.");
+				Log.Info(plugin, Name + " §aReloaded!"); 
 				return true;
-			}
-			else 
-			if (args.length >= 1){
-				if(args[0].equalsIgnoreCase("reload") && sender.hasPermission("havenelytra.reload")) {
-					Main.config.Reload();
-					Main.combine.Reload();
-					Main.separate.Reload();
-					Main.main.Reload();
-					Lang.lang.Reload();
-					Main.translator = new Translator(Main.config.GetString("language"));
-					sender.sendMessage(Name +" §aReloaded.");
-					Log.Info(plugin, Name + " §aReloaded!"); 
-					return true;
-				}
 			}
 				
 			if(args[0].equalsIgnoreCase("convert")) {
@@ -78,7 +75,7 @@ public class CommandListener implements CommandExecutor {
 				ItemStack item = player.getInventory().getItemInMainHand();
 				if(item != null) {
 					if(item.getType() == Material.ELYTRA && item.hasItemMeta()) {
-		        		if(Tags.Has(plugin, item.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER)) {
+						if(Tags.Has(plugin, item.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER)) {
 							Log.Debug(plugin, "Converting Elytra.");
 							ConvertData(item, "combined");
 							ConvertData(item, "chestplate-type");
@@ -89,7 +86,8 @@ public class CommandListener implements CommandExecutor {
 						}
 					}
 				}	
-			
+				
+			}
 		}
 		return false;
 	}
