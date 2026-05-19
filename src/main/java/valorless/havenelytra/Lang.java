@@ -12,13 +12,13 @@ import org.bukkit.OfflinePlayer;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import valorless.havenelytra.hooks.PlaceholderAPIHook;
-import valorless.valorlessutils.ValorlessUtils.Log;
+import valorless.valorlessutils.logging.Log;
 import valorless.valorlessutils.utils.Utils;
 
 public class Lang {
 	
 	public static Config lang;
-	public static String plugin = "§7[§aHaven§bElytra§7]§r";
+	public static String plugin = "&7[&aHaven&bElytra&7]&r";
 	
 	public static String Parse(String text, OfflinePlayer player) {
 		if(!Utils.IsStringNullOrEmpty(text)) {
@@ -30,14 +30,14 @@ public class Lang {
 				// Choose random player as placeholder to parse strings, without a defined player.
 				text = ParsePlaceholderAPI(text, offp[0]);
 			}
-		
-			text = hex(text);
-			text = text.replace("&", "§");
-			text = text.replace("\\n", "\n");
 			if(text.contains("%plugin%")) { text = text.replace("%plugin%", plugin); }
 			if(player != null) {
 				text = text.replace("%player%", player.getName());
 			}
+		
+			text = hex(text);
+			text = text.replace("&", "§");
+			text = text.replace("\\n", "\n");
 		}
 		return text;
 	}
@@ -70,11 +70,11 @@ public class Lang {
 	*/
 	
 	public static String Get(String key) {
-		if(lang.Get(key) == null) {
-			Log.Error(Main.plugin, String.format("Lang.yml is missing the key '%s'!", key));
+		if(lang.get(key) == null) {
+			Log.error(Main.plugin, String.format("Lang.yml is missing the key '%s'!", key));
 			return "§4error";
 		}
-		return hex(lang.GetString(key));
+		return hex(lang.getString(key));
 	}
 
 	/* Old Code
@@ -144,7 +144,7 @@ public class Lang {
 			try {
 				t =  PlaceholderAPI.setPlaceholders(player, text);  
         	}catch (Exception e) {
-        		Log.Error(Main.plugin, "Failed to get PlaceholderAPI. Is it up to date?)");
+        		Log.error(Main.plugin, "Failed to get PlaceholderAPI. Is it up to date?)");
         		t = text;
         	}
 			return t;

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>valorless.havenelytra</groupId>
   <artifactId>HavenElytra</artifactId>
-  <version>2.1.1</version>
+  <version>2.2.0</version>
   <scm>
     <connection>scm:svn:http://127.0.0.1/dummy</connection>
     <developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>
@@ -87,31 +87,8 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-install-plugin</artifactId>
-    <version>2.5.2</version>
-    <executions>
-        <execution>
-            <id>install-external</id>
-            <phase>clean</phase>
-            <configuration>
-                <file>${basedir}/dependencies/ValorlessUtils-1.5.8.219-SNAPSHOT.jar</file>
-                <repositoryLayout>default</repositoryLayout>
-                <groupId>valorless.valorlessutils</groupId>
-                <artifactId>ValorlessUtils</artifactId>
-                <version>1.5.8.219-SNAPSHOT</version>
-                <packaging>jar</packaging>
-                <generatePom>true</generatePom>
-            </configuration>
-            <goals>
-                <goal>install-file</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
       </plugins>
-      <finalName>${project.artifactId}-${project.version}.${buildNumber}-SNAPSHOT</finalName>
+      <finalName>${project.artifactId}-${project.version}.${buildNumber}</finalName>
   </build>
   <repositories>
        <repository>
@@ -138,7 +115,7 @@
        <dependency>
 		<groupId>valorless.valorlessutils</groupId>
 		<artifactId>ValorlessUtils</artifactId>
-		<version>1.5.8.219-SNAPSHOT</version>
+		<version>1.19.0</version>
 	</dependency>
         <dependency>
          <groupId>me.clip</groupId>

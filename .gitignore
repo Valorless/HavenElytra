@@ -1,1 +1,7 @@
-/target/
+target/
+.idea
+HavenElytra.iml
+/target/classes
+target/classes/plugin.yml
+target/classes/buildNumber.properties
+target/maven-archiver/pom.properties

@@ -6,7 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.economy.Economy;
 import valorless.havenelytra.Main;
-import valorless.valorlessutils.ValorlessUtils.Log;
+import valorless.valorlessutils.logging.Log;
 
 public class VaultHook {
 	private static Economy economy;
@@ -14,11 +14,11 @@ public class VaultHook {
 	public static void Hook() {
 		JavaPlugin plugin = Main.plugin;
 		
-		Log.Debug(plugin, "Attempting to hook Vault.");
+		Log.debug(plugin, "Attempting to hook Vault.");
 		if (setupEconomy()) {
-    		Log.Info(plugin, "Vault integrated!");
+    		Log.info(plugin, "Vault integrated!");
 		}else {
-			Log.Debug(plugin, "Vault not detected.");
+			Log.debug(plugin, "Vault not detected.");
 		}
 	}
 	

@@ -27,10 +27,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.common.collect.Multimap;
 
+import valorless.valorlessutils.tags.TagType;
 import valorless.valorlessutils.utils.Utils;
 import valorless.havenelytra.hooks.VaultHook;
-import valorless.valorlessutils.ValorlessUtils.Log;
-import valorless.valorlessutils.ValorlessUtils.Tags;
+import valorless.valorlessutils.logging.Log;
+import valorless.valorlessutils.tags.Tags;
 import valorless.valorlessutils.config.Config;
 import valorless.valorlessutils.json.JsonUtils;
 import valorless.valorlessutils.nbt.NBT;
@@ -59,10 +60,10 @@ public class GUI implements Listener {
 	public GUI(Player player) {
 		this.player = player;
 		this.config = new Config(plugin, "gui-main.yml");
-		this.size = config.GetInt("gui-size");
-		inv = Bukkit.createInventory(player, config.GetInt("gui-size"), Lang.Parse(config.GetString("gui-name"), null));
+		this.size = config.getInt("gui-size");
+		inv = Bukkit.createInventory(player, config.getInt("gui-size"), Lang.Parse(config.getString("gui-name"), null));
 		UpdateGUI(Menu.main);
-		SFX.Play(config.GetString("sound"), config.GetFloat("volume").floatValue(), config.GetFloat("pitch").floatValue(), player);
+		SFX.Play(config.getString("sound"), config.getDouble("volume").floatValue(), config.getDouble("pitch").floatValue(), player);
         OpenInventory(player);
         Main.openGUIs.add(this);
     }
@@ -76,13 +77,13 @@ public class GUI implements Listener {
 			if(inv != null) inv.clear();
 			config = new Config(plugin, "gui-" + menu.toString() + ".yml");
     		InitializeLists();
-    		inv = Bukkit.createInventory(player, config.GetInt("gui-size"), Lang.Parse(config.GetString("gui-name"), null));
+    		inv = Bukkit.createInventory(player, config.getInt("gui-size"), Lang.Parse(config.getString("gui-name"), null));
     		player.openInventory(inv);
-        	filler = config.GetString("filler");
+        	filler = config.getString("filler");
         	InitializeItems();
 		} catch(Exception e) {
 			e.printStackTrace();
-			Log.Error(plugin, e.getMessage());
+			Log.error(plugin, e.getMessage());
 		}
 		
 	}
@@ -91,14 +92,14 @@ public class GUI implements Listener {
     	items = new ArrayList<Items>();
     	for(int i = 0; i < size; i++) {
     		Items item = new Items();
-    		item.name = config.GetString("gui." + i + ".name");
-    		item.item = config.GetString("gui." + i + ".item");
-    		item.lore = config.GetStringList("gui." + i + ".lore");
-    		if(config.GetInt("gui." + i + ".custom-model-data") != null) {
-    			item.customModelData = config.GetInt("gui." + i + ".custom-model-data");
+    		item.name = config.getString("gui." + i + ".name");
+    		item.item = config.getString("gui." + i + ".item");
+    		item.lore = config.getStringList("gui." + i + ".lore");
+    		if(config.getInt("gui." + i + ".custom-model-data") != null) {
+    			item.customModelData = config.getInt("gui." + i + ".custom-model-data");
     		}
-    		item.tag = config.GetString("gui." + i + ".tag");
-    		if(Utils.IsStringNullOrEmpty(config.GetString("gui." + i + ".tag"))) {
+    		item.tag = config.getString("gui." + i + ".tag");
+    		if(Utils.IsStringNullOrEmpty(config.getString("gui." + i + ".tag"))) {
     			item.tag = "";
     		}
         	items.add(item);
@@ -117,8 +118,8 @@ public class GUI implements Listener {
     		}
     	}
     	if(g == 0) {
-    		Log.Error(plugin, String.format("GUI of 'gui-%s.yml' is empty. Consider using one of the templates!", menu));
-    		Log.Error(plugin, "This is not an error with the plugin, you have not set up the GUI like adviced on Spigot.");
+    		Log.error(plugin, String.format("GUI of 'gui-%s.yml' is empty. Consider using one of the templates!", menu));
+    		Log.error(plugin, "This is not an error with the plugin, you have not set up the GUI like adviced on Spigot.");
     	}
     }
 	
@@ -181,7 +182,7 @@ public class GUI implements Listener {
             	//Log.Info(plugin, tag);
             	if(action == GUIAction.COMBINE){
             		if(player.hasPermission("havenelytra.combine")) {
-            			if(Main.config.GetBool("combine")) { UpdateGUI(Menu.combine); return; }
+            			if(Main.config.getBool("combine")) { UpdateGUI(Menu.combine); return; }
             			else { 
                 			player.sendMessage(Lang.Parse(Lang.Get("combine-disabled"),null));
             			}
@@ -191,7 +192,7 @@ public class GUI implements Listener {
             	}
             	if(action == GUIAction.SEPARATE) {
             		if(player.hasPermission("havenelytra.separate")) {
-            			if(Main.config.GetBool("separate")) { UpdateGUI(Menu.separate); return; }
+            			if(Main.config.getBool("separate")) { UpdateGUI(Menu.separate); return; }
             			else { 
                 			player.sendMessage(Lang.Parse(Lang.Get("separate-disabled"),null));
             			}
@@ -232,7 +233,7 @@ public class GUI implements Listener {
         				}
         			}
         			if(elytra == null) return;
-        			if(Tags.Has(plugin, elytra.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER)) {
+        			if(Tags.Has(plugin, elytra.getItemMeta().getPersistentDataContainer(), "combined", TagType.INTEGER)) {
         				player.sendMessage("Please convert this elytra with §e/havenelytra convert§r.");
                 		e.setCancelled(true);
                 		return;
@@ -270,12 +271,12 @@ public class GUI implements Listener {
             				}
             			}
             			if(elytra.getItemMeta().getLore() != null) {
-            				lore.add("§r");
+            				lore.add(Lang.Parse("&r", null));
             				for(String str : elytra.getItemMeta().getLore()) {
             					lore.add(str);
             				}
             			}
-            			lore.add("§r");
+            			lore.add(Lang.Parse("&r", null));
             			placeholders.add(new Placeholder("%chestplate%", chestplateName));
             			lore.add(Lang.Parse(Lang.Get("combined-elytra-lore"), placeholders));
             			//lore.add("§7+ [" + chestplateName + "§7]");
@@ -329,7 +330,7 @@ public class GUI implements Listener {
             			e.getInventory().clear(slots.get(1));
             			e.getInventory().setItem(slots.get(2), chestplate);
             			player.sendMessage(Lang.Parse(Lang.Get("combine-success"),null));
-            			SFX.Play(config.GetString("sound"), config.GetFloat("volume").floatValue(), config.GetFloat("pitch").floatValue(), player);
+            			SFX.Play(config.getString("sound"), config.getFloat("volume").floatValue(), config.getFloat("pitch").floatValue(), player);
             		}
             	}
             }
@@ -367,7 +368,7 @@ public class GUI implements Listener {
         				}
         			}
         			if(elytra == null) return;
-        			if(Tags.Has(plugin, elytra.getItemMeta().getPersistentDataContainer(), "combined", PersistentDataType.INTEGER)) {
+        			if(Tags.Has(plugin, elytra.getItemMeta().getPersistentDataContainer(), "combined", TagType.INTEGER)) {
         				player.sendMessage("Please convert this elytra with §e/havenelytra convert§r.");
                 		e.setCancelled(true);
                 		return;
@@ -391,12 +392,12 @@ public class GUI implements Listener {
             			Map <Enchantment, Integer> enchants = elytra.getItemMeta().getEnchants();
             			replacementElytra.setItemMeta((ItemMeta)JsonUtils.fromJson(NBT.GetString(elytra, "elytra-elytra-meta")));
             			chestplate.setItemMeta((ItemMeta)JsonUtils.fromJson(NBT.GetString(elytra, "elytra-chestplate-meta")));
-            			if(Main.config.GetBool("item-damage.enabled")) {
+            			if(Main.config.getBool("item-damage.enabled")) {
         					int damage = replacementElytra.getDurability() - elytra.getDurability();
-            				if(Main.config.GetBool("item-damage.damage-chestplate")) {
+            				if(Main.config.getBool("item-damage.damage-chestplate")) {
             					chestplate.setDurability((short) (chestplate.getDurability() - damage));
             				}
-            				if(Main.config.GetBool("item-damage.damage-elytra")) {
+            				if(Main.config.getBool("item-damage.damage-elytra")) {
             					replacementElytra.setDurability(elytra.getDurability());
             				}
             			}
@@ -409,7 +410,7 @@ public class GUI implements Listener {
             			e.getInventory().setItem(slots.get(1), replacementElytra);
             			e.getInventory().setItem(slots.get(2), chestplate);
             			player.sendMessage(Lang.Parse(Lang.Get("separate-success"),null));
-            			SFX.Play(config.GetString("sound"), config.GetFloat("volume").floatValue(), config.GetFloat("pitch").floatValue(), player);
+            			SFX.Play(config.getString("sound"), config.getFloat("volume").floatValue(), config.getFloat("pitch").floatValue(), player);
             		}
             	}
             }
@@ -495,22 +496,22 @@ public class GUI implements Listener {
     	if(chestplate == null) {
     		return false;
     	}
-    	if(chestplate.getType() == Material.LEATHER_CHESTPLATE && config.GetBool("leather") == false) {
+    	if(chestplate.getType() == Material.LEATHER_CHESTPLATE && config.getBool("leather") == false) {
     		player.sendMessage(Lang.Parse(Lang.Get("material-disabled"),null));
     		return false;
-    	}else if(chestplate.getType() == Material.IRON_CHESTPLATE && config.GetBool("iron") == false) {
+    	}else if(chestplate.getType() == Material.IRON_CHESTPLATE && config.getBool("iron") == false) {
     		player.sendMessage(Lang.Parse(Lang.Get("material-disabled"),null));
     		return false;
-    	}else if(chestplate.getType() == Material.GOLDEN_CHESTPLATE && config.GetBool("gold") == false) {
+    	}else if(chestplate.getType() == Material.GOLDEN_CHESTPLATE && config.getBool("gold") == false) {
     		player.sendMessage(Lang.Parse(Lang.Get("material-disabled"),null));
     		return false;
-    	}else if(chestplate.getType() == Material.CHAINMAIL_CHESTPLATE && config.GetBool("chainmail") == false) {
+    	}else if(chestplate.getType() == Material.CHAINMAIL_CHESTPLATE && config.getBool("chainmail") == false) {
     		player.sendMessage(Lang.Parse(Lang.Get("material-disabled"),null));
     		return false;
-    	}else if(chestplate.getType() == Material.DIAMOND_CHESTPLATE && config.GetBool("diamond") == false) {
+    	}else if(chestplate.getType() == Material.DIAMOND_CHESTPLATE && config.getBool("diamond") == false) {
     		player.sendMessage(Lang.Parse(Lang.Get("material-disabled"),null));
     		return false;
-    	}else if(chestplate.getType() == Material.NETHERITE_CHESTPLATE && config.GetBool("netherite") == false) {
+    	}else if(chestplate.getType() == Material.NETHERITE_CHESTPLATE && config.getBool("netherite") == false) {
     		player.sendMessage(Lang.Parse(Lang.Get("material-disabled"),null));
     		return false;
     	}else {
@@ -577,12 +578,12 @@ public class GUI implements Listener {
     }
     
     public boolean Buy(Menu menu) {
-        Double cost = Main.config.GetFloat(menu.name() + "-cost");
+        Double cost = Main.config.getDouble(menu.name() + "-cost");
         if(cost == 0 || cost == 0.0) return true; //Skip
         
         if(VaultHook.getEconomy() == null) {
-    		Log.Error(plugin, "Something went wrong while attempting to use Vault.");
-        	Log.Error(plugin, "is it up to date?");
+    		Log.error(plugin, "Something went wrong while attempting to use Vault.");
+        	Log.error(plugin, "is it up to date?");
         	return true;
         }
         
@@ -595,7 +596,7 @@ public class GUI implements Listener {
             	return true;
         	} catch (Exception e) {
         		player.sendMessage("§cSomething went wrong..");
-        		Log.Error(plugin, "Something went wrong while attempting to use Vault.");
+        		Log.error(plugin, "Something went wrong while attempting to use Vault.");
         		return false;
         	}
         }else {
@@ -616,29 +617,29 @@ public class GUI implements Listener {
     }
     
     void SetCustomModelData(ItemStack elytra, Material type, ItemMeta chestMeta) {
-    	if(!Main.config.GetBool("custommodeldata.enabled")) return;
+    	if(!Main.config.getBool("custommodeldata.enabled")) return;
     	
-    	if(!Main.config.GetBool("custommodeldata.per-material.enabled")) {
-    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.combined"));
+    	if(!Main.config.getBool("custommodeldata.per-material.enabled")) {
+    		chestMeta.setCustomModelData(Main.config.getInt("custommodeldata.combined"));
     	} else {
     		switch(type) {
     			case LEATHER_CHESTPLATE:
-    	    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.per-material.leather"));
+    	    		chestMeta.setCustomModelData(Main.config.getInt("custommodeldata.per-material.leather"));
     				break;
     			case IRON_CHESTPLATE:
-    	    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.per-material.iron"));
+    	    		chestMeta.setCustomModelData(Main.config.getInt("custommodeldata.per-material.iron"));
     				break;
     			case GOLDEN_CHESTPLATE:
-    	    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.per-material.gold"));
+    	    		chestMeta.setCustomModelData(Main.config.getInt("custommodeldata.per-material.gold"));
     				break;
     			case CHAINMAIL_CHESTPLATE:
-    	    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.per-material.chainmail"));
+    	    		chestMeta.setCustomModelData(Main.config.getInt("custommodeldata.per-material.chainmail"));
     				break;
     			case DIAMOND_CHESTPLATE:
-    	    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.per-material.diamond"));
+    	    		chestMeta.setCustomModelData(Main.config.getInt("custommodeldata.per-material.diamond"));
     				break;
     			case NETHERITE_CHESTPLATE:
-    	    		chestMeta.setCustomModelData(Main.config.GetInt("custommodeldata.per-material.netherite"));
+    	    		chestMeta.setCustomModelData(Main.config.getInt("custommodeldata.per-material.netherite"));
     				break;
     				
     		}

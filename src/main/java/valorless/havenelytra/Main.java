@@ -2,7 +2,7 @@ package valorless.havenelytra;
 
 import valorless.havenelytra.hooks.PlaceholderAPIHook;
 import valorless.havenelytra.hooks.VaultHook;
-import valorless.valorlessutils.ValorlessUtils.Log;
+import valorless.valorlessutils.logging.Log;
 import valorless.valorlessutils.config.Config;
 import valorless.valorlessutils.translate.Translator;
 
@@ -51,23 +51,23 @@ public final class Main extends JavaPlugin implements Listener {
 	
 	@SuppressWarnings("unused")
 	boolean ValorlessUtils() {
-		Log.Debug(plugin, "Checking ValorlessUtils");
+		Log.debug(plugin, "Checking ValorlessUtils");
 		
 		int requiresBuild = 219;
 		
 		String ver = Bukkit.getPluginManager().getPlugin("ValorlessUtils").getDescription().getVersion();
 		//Log.Debug(plugin, ver);
 		String[] split = ver.split("[.]");
-		int major = Integer.valueOf(split[0]);
-		int minor = Integer.valueOf(split[1]);
-		int hotfix = Integer.valueOf(split[2]);
-		int build = Integer.valueOf(split[3]);
+		int major = Integer.parseInt(split[0]);
+		int minor = Integer.parseInt(split[1]);
+		int hotfix = Integer.parseInt(split[2]);
+		int build = Integer.parseInt(split[3]);
 		
 		if(build < requiresBuild) {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
         		public void run() {
-        			Log.Error(plugin, String.format("HavenBags requires ValorlessUtils build %s or newer, found %s. (%s)", requiresBuild, build, ver));
-        			Log.Error(plugin, "https://www.spigotmc.org/resources/valorlessutils.109586/");
+        			Log.error(plugin, String.format("HavenBags requires ValorlessUtils build %s or newer, found %s. (%s)", requiresBuild, build, ver));
+        			Log.error(plugin, "https://www.spigotmc.org/resources/valorlessutils.109586/");
         			Bukkit.getPluginManager().disablePlugin(plugin);
         		}
     		}, 10);
@@ -78,7 +78,7 @@ public final class Main extends JavaPlugin implements Listener {
 	
 	@Override
     public void onEnable() {
-		Log.Debug(plugin, "HavenElytra Debugging Enabled!");
+		Log.debug(plugin, "HavenElytra Debugging Enabled!");
 		
 		// Check if a correct version of ValorlessUtils is in use, otherwise don't run the rest of the code.
 		if(!ValorlessUtils()) return;
@@ -89,91 +89,91 @@ public final class Main extends JavaPlugin implements Listener {
 		CreateTemplates();
 		
 		//Config
-		config.AddValidationEntry("debug", false);
-		config.AddValidationEntry("check-updates", true);
-		config.AddValidationEntry("language", "en_us");
-		config.AddValidationEntry("combine", true);
-		config.AddValidationEntry("combine-cost", 0);
-		config.AddValidationEntry("separate", true);
-		config.AddValidationEntry("separate-cost", 0);
-		config.AddValidationEntry("custommodeldata.enabled", false);
-		config.AddValidationEntry("custommodeldata.combined", 12070);
-		config.AddValidationEntry("custommodeldata.per-material.enabled", false);
-		config.AddValidationEntry("custommodeldata.per-material.leather", 12071);
-		config.AddValidationEntry("custommodeldata.per-material.iron", 12072);
-		config.AddValidationEntry("custommodeldata.per-material.gold", 12073);
-		config.AddValidationEntry("custommodeldata.per-material.chainmail", 12074);
-		config.AddValidationEntry("custommodeldata.per-material.diamond", 12075);
-		config.AddValidationEntry("custommodeldata.per-material.netherite", 12076);
-		config.AddValidationEntry("item-damage.enabled", true);
-		config.AddValidationEntry("item-damage.chestplate-damage", true);
-		config.AddValidationEntry("item-damage.elytra-damage", false);
-		Log.Debug(plugin, "Validating config.yml");
-		config.Validate();
+		config.addValidationEntry("debug", false);
+		config.addValidationEntry("check-updates", true);
+		config.addValidationEntry("language", "en_us");
+		config.addValidationEntry("combine", true);
+		config.addValidationEntry("combine-cost", 0);
+		config.addValidationEntry("separate", true);
+		config.addValidationEntry("separate-cost", 0);
+		config.addValidationEntry("custommodeldata.enabled", false);
+		config.addValidationEntry("custommodeldata.combined", 12070);
+		config.addValidationEntry("custommodeldata.per-material.enabled", false);
+		config.addValidationEntry("custommodeldata.per-material.leather", 12071);
+		config.addValidationEntry("custommodeldata.per-material.iron", 12072);
+		config.addValidationEntry("custommodeldata.per-material.gold", 12073);
+		config.addValidationEntry("custommodeldata.per-material.chainmail", 12074);
+		config.addValidationEntry("custommodeldata.per-material.diamond", 12075);
+		config.addValidationEntry("custommodeldata.per-material.netherite", 12076);
+		config.addValidationEntry("item-damage.enabled", true);
+		config.addValidationEntry("item-damage.chestplate-damage", true);
+		config.addValidationEntry("item-damage.elytra-damage", false);
+		Log.debug(plugin, "Validating config.yml");
+		config.validate();
 		
 		//Main GUI
-		main.AddValidationEntry("sound", "ENTITY_PLAYER_LEVELUP");
-		main.AddValidationEntry("volume", 1.0);
-		main.AddValidationEntry("pitch", 1.0);
-		main.AddValidationEntry("gui-name", "&a&lHaven Elytra");
-		main.AddValidationEntry("gui-size", 27);
-		main.AddValidationEntry("gui", "");
-		main.AddValidationEntry("filler", "BLACK_STAINED_GLASS_PANE");
-		Log.Debug(plugin, "Validating gui-main.yml");
-		main.Validate();
+		main.addValidationEntry("sound", "ENTITY_PLAYER_LEVELUP");
+		main.addValidationEntry("volume", 1.0);
+		main.addValidationEntry("pitch", 1.0);
+		main.addValidationEntry("gui-name", "&a&lHaven Elytra");
+		main.addValidationEntry("gui-size", 27);
+		main.addValidationEntry("gui", "");
+		main.addValidationEntry("filler", "BLACK_STAINED_GLASS_PANE");
+		Log.debug(plugin, "Validating gui-main.yml");
+		main.validate();
 
 		//Combine
-		combine.AddValidationEntry("sound", "BLOCK_ANVIL_USE");
-		combine.AddValidationEntry("volume", 1.0);
-		combine.AddValidationEntry("pitch", 1.0);
-		combine.AddValidationEntry("gui-name", "&aCombination");
-		combine.AddValidationEntry("gui-size", 27);
-		combine.AddValidationEntry("gui", "");
-		combine.AddValidationEntry("filler", "BLACK_STAINED_GLASS_PANE");
-		combine.AddValidationEntry("leather", true);
-		combine.AddValidationEntry("iron", true);
-		combine.AddValidationEntry("gold", true);
-		combine.AddValidationEntry("chainmail", true);
-		combine.AddValidationEntry("diamond", true);
-		combine.AddValidationEntry("netherite", true);
-		Log.Debug(plugin, "Validating gui-combine.yml");
-		combine.Validate();
+		combine.addValidationEntry("sound", "BLOCK_ANVIL_USE");
+		combine.addValidationEntry("volume", 1.0);
+		combine.addValidationEntry("pitch", 1.0);
+		combine.addValidationEntry("gui-name", "&aCombination");
+		combine.addValidationEntry("gui-size", 27);
+		combine.addValidationEntry("gui", "");
+		combine.addValidationEntry("filler", "BLACK_STAINED_GLASS_PANE");
+		combine.addValidationEntry("leather", true);
+		combine.addValidationEntry("iron", true);
+		combine.addValidationEntry("gold", true);
+		combine.addValidationEntry("chainmail", true);
+		combine.addValidationEntry("diamond", true);
+		combine.addValidationEntry("netherite", true);
+		Log.debug(plugin, "Validating gui-combine.yml");
+		combine.validate();
 
 		//Separate
-		separate.AddValidationEntry("sound", "BLOCK_ANVIL_USE");
-		separate.AddValidationEntry("volume", 1.0);
-		separate.AddValidationEntry("pitch", 1.0);
-		separate.AddValidationEntry("gui-name", "&cSeparation");
-		separate.AddValidationEntry("gui-size", 27);
-		separate.AddValidationEntry("gui", "");
-		separate.AddValidationEntry("filler", "BLACK_STAINED_GLASS_PANE");
-		Log.Debug(plugin, "Validating gui-separate.yml");
-		separate.Validate();
+		separate.addValidationEntry("sound", "BLOCK_ANVIL_USE");
+		separate.addValidationEntry("volume", 1.0);
+		separate.addValidationEntry("pitch", 1.0);
+		separate.addValidationEntry("gui-name", "&cSeparation");
+		separate.addValidationEntry("gui-size", 27);
+		separate.addValidationEntry("gui", "");
+		separate.addValidationEntry("filler", "BLACK_STAINED_GLASS_PANE");
+		Log.debug(plugin, "Validating gui-separate.yml");
+		separate.validate();
 		
 		//Lang
-		Lang.lang.AddValidationEntry("no-permission", "%plugin% &cSorry, you do not have permission to do this.");
-		Lang.lang.AddValidationEntry("combine-success", "%plugin% &aCombination success!");
-		Lang.lang.AddValidationEntry("combine-fail", "%plugin% &cCombination failed!\nElytra is already combined.");
-		Lang.lang.AddValidationEntry("combine-disabled", "%plugin% &cCombination is disabled.");
-		Lang.lang.AddValidationEntry("combined-elytra-lore", "&7+ [%s&7]");
-		Lang.lang.AddValidationEntry("separate-success", "%plugin% &aSeparation success!");
-		Lang.lang.AddValidationEntry("separate-fail", "%plugin% &cCombination failed!\nElytra is not combined.");
-		Lang.lang.AddValidationEntry("separate-disabled", "%plugin% &cSeparation is disabled.");
-		Lang.lang.AddValidationEntry("material-disabled", "%plugin% &cThis type of chestplate cannot be used.");
-		Lang.lang.AddValidationEntry("not-repaired", "%plugin% &cOne or more items are damaged.");
-		Lang.lang.AddValidationEntry("cannot-afford", "%plugin% &cYou do not have enough money.");
-		Lang.lang.AddValidationEntry("can-afford", "%plugin% &a$%cost% has been taken from your balance.");
-		Log.Debug(plugin, "Validating lang.yml");
-		Lang.lang.Validate();
+		Lang.lang.addValidationEntry("no-permission", "%plugin% &cSorry, you do not have permission to do this.");
+		Lang.lang.addValidationEntry("combine-success", "%plugin% &aCombination success!");
+		Lang.lang.addValidationEntry("combine-fail", "%plugin% &cCombination failed!\nElytra is already combined.");
+		Lang.lang.addValidationEntry("combine-disabled", "%plugin% &cCombination is disabled.");
+		Lang.lang.addValidationEntry("combined-elytra-lore", "&7+ [%s&7]");
+		Lang.lang.addValidationEntry("separate-success", "%plugin% &aSeparation success!");
+		Lang.lang.addValidationEntry("separate-fail", "%plugin% &cCombination failed!\nElytra is not combined.");
+		Lang.lang.addValidationEntry("separate-disabled", "%plugin% &cSeparation is disabled.");
+		Lang.lang.addValidationEntry("material-disabled", "%plugin% &cThis type of chestplate cannot be used.");
+		Lang.lang.addValidationEntry("not-repaired", "%plugin% &cOne or more items are damaged.");
+		Lang.lang.addValidationEntry("cannot-afford", "%plugin% &cYou do not have enough money.");
+		Lang.lang.addValidationEntry("can-afford", "%plugin% &a$%cost% has been taken from your balance.");
+		Log.debug(plugin, "Validating lang.yml");
+		Lang.lang.validate();
 
 		CommandListener.onEnable();
 				
 		RegisterCommands();
 		
-		translator = new Translator(config.GetString("language"));
+		translator = new Translator(config.getString("language"));
 		
-		if(config.GetBool("check-updates") == true) {
-			Log.Info(plugin, "Checking for updates..");
+		if(config.getBool("check-updates") == true) {
+			Log.info(plugin, "Checking for updates..");
 			new UpdateChecker(this, 109583).getVersion(version -> {
 
 				newVersion = version;
@@ -185,13 +185,13 @@ public final class Main extends JavaPlugin implements Listener {
 
 				//if (!getDescription().getVersion().equals(version)) {
 				if (v < newupdate) {
-						Log.Warning(plugin, String.format("An update has been found! (v%s, you are on v%s) \n", version, getDescription().getVersion()) + 
+						Log.warning(plugin, String.format("An update has been found! (v%s, you are on v%s) \n", version, getDescription().getVersion()) +
 							"This could be bug fixes or additional features.\n" + 
 							"Please update HavenElytra at https://www.spigotmc.org/resources/109583/");
 					
 					uptodate = false;
 				}else {
-					Log.Info(plugin, "Up to date.");
+					Log.info(plugin, "Up to date.");
 				}
 			});
 		}
@@ -206,7 +206,7 @@ public final class Main extends JavaPlugin implements Listener {
     
     @Override
     public void onDisable() {
-    	if(openGUIs.size() > 0) {
+    	if(!openGUIs.isEmpty()) {
     		for(GUI gui : openGUIs) {
     			gui.Close();
     		}
@@ -214,10 +214,10 @@ public final class Main extends JavaPlugin implements Listener {
     }
     
     public void RegisterCommands() {
-    	for (int i = 0; i < commands.length; i++) {
-    		Log.Debug(plugin, "Registering Command: " + commands[i]);
-    		getCommand(commands[i]).setExecutor(new CommandListener());
-    	}
+        for (String command : commands) {
+            Log.debug(plugin, "Registering Command: " + command);
+            getCommand(command).setExecutor(new CommandListener());
+        }
     }
 
 
@@ -225,7 +225,7 @@ public final class Main extends JavaPlugin implements Listener {
 	public void UpdateNotification(PlayerJoinEvent e) {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
 		    public void run() {
-		    	if (config.GetBool("check-updates") && e.getPlayer().isOp() && uptodate == false) {
+		    	if (config.getBool("check-updates") && e.getPlayer().isOp() && uptodate == false) {
 					e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',
 						"&7[&aHaven&bElytra&7] " + "&fAn update has been found.\nPlease download version&a " + newupdate
 						+ ", &fyou are on version&a " + getDescription().getVersion() + "!"
@@ -237,11 +237,11 @@ public final class Main extends JavaPlugin implements Listener {
 	}
     
     public void CreateTemplates() {
-		Log.Debug(plugin, "Checking if gui templates exist");
+		Log.debug(plugin, "Checking if gui templates exist");
     	File templatesFolder = new File(plugin.getDataFolder() + "/templates");
 		if(!templatesFolder.exists()) {
-			Log.Warning(plugin, "No GUI templates found, creating new.");
-			Log.Warning(plugin, "/plugins/HavenElytra/templates/");
+			Log.warning(plugin, "No GUI templates found, creating new.");
+			Log.warning(plugin, "/plugins/HavenElytra/templates/");
         }
 		
     	
