@@ -113,7 +113,7 @@ public class GUI implements Listener {
     			inv.setItem(i, CreateGuiItem(Material.getMaterial(items.get(i).item), items.get(i).name, items.get(i).tag, items.get(i).lore, items.get(i).customModelData));
     			g++;
     		} else {
-    			inv.setItem(i, CreateGuiItem(Material.getMaterial(filler.toUpperCase()), "§f", null, null, 80000));
+    			inv.setItem(i, CreateGuiItem(Material.getMaterial(filler.toUpperCase()), Lang.Parse("&f",null), null, null, 80000));
     			
     		}
     	}
